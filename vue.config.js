@@ -1,7 +1,6 @@
 module.exports = {
   indexPath: "index.html",
   assetsDir: "./static",
-  publicPath:'/fe/',
   productionSourceMap: false,
   chainWebpack: config => {
     config
