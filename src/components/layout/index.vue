@@ -9,26 +9,36 @@
       mode="horizontal"
     >
       <a-menu-item :key="item.path" v-for="item in routes">
-        <component :is="item.meta.icon"></component>{{ item.meta.title }}
+        <router-link :to="item.path">
+          <component :is="item.meta.icon"></component
+          >{{ item.meta.title }}</router-link
+        >
       </a-menu-item>
     </a-menu>
-   <div class="main">
-      <router-view></router-view>
-   </div>
+    <div class="main">
+      <transition> <router-view></router-view></transition>
+     
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import router from "@/router";
-import { defineComponent, reactive, toRefs } from "vue";
 import {
-  UserOutlined,
-} from "@ant-design/icons-vue";
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  getCurrentInstance,
+  watch,
+} from "vue";
+import { UserOutlined } from "@ant-design/icons-vue";
 export default defineComponent({
   components: {
     UserOutlined,
   },
   setup() {
+    const { proxy }: any = getCurrentInstance();
     let { options } = router;
     const { routes } = options;
     const state: any = reactive({
@@ -36,15 +46,15 @@ export default defineComponent({
       routes: routes,
     });
 
-    const handleClick = (e: any) => {};
-    const titleClick = (e: any) => {
-      console.log("titleClick", e);
-    };
+    watch(
+      () => proxy.$route,
+      ($route, prev) => {
+        state.current = [$route.path];
+      }
+    );
 
     return {
       ...toRefs(state),
-      handleClick,
-      titleClick,
     };
   },
 });
@@ -55,7 +65,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  .main{
+  .main {
     width: 100%;
     height: 100%;
     overflow: auto;
@@ -63,8 +73,8 @@ export default defineComponent({
     position: absolute;
   }
 }
-::v-deep{
-  .ant-menu{
+::v-deep {
+  .ant-menu {
     background: rgba(255, 255, 255, 0.5);
   }
 }
