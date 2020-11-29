@@ -1,6 +1,3 @@
 <template>
   <MD></MD>
 </template>
-
-
-

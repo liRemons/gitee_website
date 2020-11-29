@@ -8,8 +8,10 @@ import store from './store'
 import methods from 'methods-remons'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+import MD from '@/components/md.vue'
 import Empty from '@/components/empty.vue'
 app.component('Empty',Empty)
+app.component('MD',MD)
 app.config.globalProperties.$utils = methods
 app.config.globalProperties.$store = useStore()
 app.config.globalProperties.$route = useRoute()

@@ -10,6 +10,15 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/html_css',
+    name: 'HTML_CSS',
+    component: () => import('@/views/htmlAndCss/index.vue'),
+    meta:{
+      title:'html/css',
+      icon:''
+    }
+  },
+  {
     path: '/js',
     name: 'JS',
     component: () => import('@/views/js/index.vue'),
@@ -33,6 +42,15 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/react/index.vue'),
     meta:{
       title:'React',
+      icon:''
+    }
+  },
+  {
+    path: '/ts',
+    name: 'TypeScript',
+    component: () => import('@/views/ts/index.vue'),
+    meta:{
+      title:'TypeScript',
       icon:''
     }
   },

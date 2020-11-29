@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="layout_flex">
     <!-- <div class="left" style="width:85%">
       <router-view></router-view>
     </div> -->
@@ -61,7 +61,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="less">
-.flex {
+.layout_flex {
   display: flex;
   flex-direction: column;
   overflow: hidden;
