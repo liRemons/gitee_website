@@ -1,30 +1,77 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">frfrfrf</router-link>
+  <div class="bg">
+    <div class="bgchild">
+      <Layout></Layout>
+    </div>
   </div>
-  <router-view/>
 </template>
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script lang="ts">
+import { defineComponent, getCurrentInstance, onMounted } from "vue";
+import Layout from "@/components/layout/index.vue";
+export default defineComponent({
+  components: {
+    Layout,
+  },
+  setup() {
+    const { proxy }: any = getCurrentInstance();
+    if (!proxy.$utils.IsPC()) {
+      window.location.href = "http://www.xtroms.com";
+    }
+    return {};
+  },
+});
+</script>
+
+<style scoped lang="less">
+.bg {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  .bgchild {
+    overflow: hidden;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.233);
+  }
 }
 
-#nav {
-  padding: 30px;
+.bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("./assets/img/bg.jpg");
+  filter: blur(5px);
+  z-index: -1;
+  background-size: cover;
+}
+</style>
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+<style >
+::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 8px; /*高宽分别对应横竖滚动条的尺寸*/
+  height: 8px;
+}
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  /*滚动条里面小方块*/
+
+  background: rgba(218, 255, 183, 0.322);
+  transition: all 0.5s;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #f3ffbe;
+}
+::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  border-radius: 5px;
+  border: none;
+  background: transparent;
 }
 </style>
