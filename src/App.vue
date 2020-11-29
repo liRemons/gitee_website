@@ -16,7 +16,7 @@ export default defineComponent({
   setup() {
     const { proxy }: any = getCurrentInstance();
     if (!proxy.$utils.IsPC()) {
-      window.location.href = "http://www.xtroms.com";
+      // window.location.href = "http://www.xtroms.com";
     }
     return {};
   },
