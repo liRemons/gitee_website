@@ -3,6 +3,7 @@
     <div class="bgchild">
       <Layout></Layout>
     </div>
+     <div class="loading" v-if="state.Loading.loading"><a-spin size="large"/></div>
   </div>
 </template>
 
@@ -15,10 +16,11 @@ export default defineComponent({
   },
   setup() {
     const { proxy }: any = getCurrentInstance();
+    const { state }: any = proxy.$store;
     if (!proxy.$utils.IsPC()) {
       // window.location.href = "http://www.xtroms.com";
     }
-    return {};
+    return {state};
   },
 });
 </script>
@@ -35,6 +37,17 @@ export default defineComponent({
     width: 100%;
     background: rgba(255, 255, 255, 0.233);
   }
+}
+
+.loading {
+  text-align: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  line-height: 600px;
+  bottom: 0;
+  background: #ffffff5e;
 }
 
 .bg::before {

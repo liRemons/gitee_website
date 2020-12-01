@@ -12,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/html_css',
     name: 'HTML_CSS',
-    component: () => import('@/views/htmlAndCss/index.vue'),
+    component: () => import('@/components/md.vue'),
     meta:{
       title:'html/css',
       icon:''
@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/js',
     name: 'JS',
-    component: () => import('@/views/js/index.vue'),
+    component: () => import('@/components/md.vue'),
     meta:{
       title:'JS',
       icon:''
@@ -30,7 +30,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/vue',
     name: 'Vue',
-    component: () => import('@/views/vue/index.vue'),
+    component: () => import('@/components/md.vue'),
     meta:{
       title:'Vue',
       icon:''
@@ -39,7 +39,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/react',
     name: 'React',
-    component: () => import('@/views/react/index.vue'),
+    component: () => import('@/components/md.vue'),
     meta:{
       title:'React',
       icon:''
@@ -48,7 +48,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/ts',
     name: 'TypeScript',
-    component: () => import('@/views/ts/index.vue'),
+    component: () => import('@/components/md.vue'),
     meta:{
       title:'TypeScript',
       icon:''

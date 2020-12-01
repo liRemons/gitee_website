@@ -16,9 +16,11 @@
       </a-menu-item>
     </a-menu>
     <div class="main">
-      <transition> <router-view></router-view></transition>
-     
+      <transition> <router-view :key="$router.path"></router-view></transition>
     </div>
+    <a-button type="primary" shape="circle" class="add" @click="visible = true">
+      A
+    </a-button>
   </div>
 </template>
 
@@ -32,11 +34,8 @@ import {
   getCurrentInstance,
   watch,
 } from "vue";
-import { UserOutlined } from "@ant-design/icons-vue";
 export default defineComponent({
-  components: {
-    UserOutlined,
-  },
+  components: {},
   setup() {
     const { proxy }: any = getCurrentInstance();
     let { options } = router;
@@ -44,6 +43,8 @@ export default defineComponent({
     const state: any = reactive({
       current: ["/"],
       routes: routes,
+      value: "",
+      content: "",
     });
 
     watch(
@@ -53,8 +54,24 @@ export default defineComponent({
       }
     );
 
+    const change = (e: any) => {
+      let file = e.target.files[0];
+      let reader = new FileReader();
+
+      // 读取纯文本文件,且编码格式为 utf-8
+      reader.readAsText(file, "UTF-8");
+      reader.onload = (a: any) => {
+        let fileContent = a.target.result;
+        let reg = /<body[^>]*>([\s\S]*)<\/body>/;
+        state.content = fileContent.match(reg)[1];
+      };
+    };
+
+    onMounted(() => {});
+
     return {
       ...toRefs(state),
+      change,
     };
   },
 });
@@ -72,6 +89,12 @@ export default defineComponent({
     top: 50px;
     position: absolute;
   }
+}
+
+.add {
+  position: fixed;
+  right: 0;
+  top: 10px;
 }
 ::v-deep {
   .ant-menu {

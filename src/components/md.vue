@@ -21,6 +21,7 @@ import {
   toRefs,
   onMounted,
   getCurrentInstance,
+  watch,
 } from "vue";
 import { useRoute } from "vue-router";
 import JS from "@/assets/js/JS";
@@ -32,12 +33,25 @@ export default defineComponent({
   setup() {
     const { proxy }: any = getCurrentInstance();
     const state = reactive({
-      html: { JS, Vue, React, HTML_CSS ,TypeScript},
+      html: { JS, Vue, React, HTML_CSS, TypeScript },
       routerName: proxy.$route.name,
       authorList: <any>[],
     });
-    console.log();
+    watch(
+      () => proxy.$route,
+      (router, prev) => {
+        state.routerName = router.name;
+        proxy.$nextTick(() => {
+          init();
+        });
+      }
+    );
     onMounted(() => {
+      init();
+    });
+
+    const init = () => {
+      state.authorList = [];
       let mdHeader: any = document.querySelectorAll(
         ".md-header-anchor"
       ) as NodeListOf<Element>;
@@ -48,7 +62,7 @@ export default defineComponent({
           offsetTop: item.parentNode.offsetTop,
         });
       });
-    });
+    };
 
     const scrollTo = (data: any) => {
       let mdEle = document.querySelector(".md") as Element;
