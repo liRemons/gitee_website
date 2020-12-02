@@ -1,26 +1,21 @@
 <template>
   <div class="layout_flex">
-    <!-- <div class="left" style="width:85%">
-      <router-view></router-view>
-    </div> -->
-    <a-menu
-      style="width: 100%"
-      v-model:selectedKeys="current"
+    <el-menu
+      router
+      :default-active="current"
+      class="el-menu-demo"
       mode="horizontal"
     >
-      <a-menu-item :key="item.path" v-for="item in routes">
-        <router-link :to="item.path">
-          <component :is="item.meta.icon"></component
-          >{{ item.meta.title }}</router-link
-        >
-      </a-menu-item>
-    </a-menu>
+      <el-menu-item
+        :index="item.path"
+        v-for="item in routes"
+        :key="item.path"
+        >{{ item.meta.title }}</el-menu-item
+      >
+    </el-menu>
     <div class="main">
       <transition> <router-view :key="$router.path"></router-view></transition>
     </div>
-    <a-button type="primary" shape="circle" class="add" @click="visible = true">
-      A
-    </a-button>
   </div>
 </template>
 
@@ -40,8 +35,9 @@ export default defineComponent({
     const { proxy }: any = getCurrentInstance();
     let { options } = router;
     const { routes } = options;
+    console.log(routes);
     const state: any = reactive({
-      current: ["/"],
+      current: "/",
       routes: routes,
       value: "",
       content: "",
@@ -50,7 +46,7 @@ export default defineComponent({
     watch(
       () => proxy.$route,
       ($route, prev) => {
-        state.current = [$route.path];
+        state.current = $route.path;
       }
     );
 
@@ -86,7 +82,7 @@ export default defineComponent({
     width: 100%;
     height: 100%;
     overflow: auto;
-    top: 50px;
+    top: 61px;
     position: absolute;
   }
 }
@@ -97,8 +93,13 @@ export default defineComponent({
   top: 10px;
 }
 ::v-deep {
-  .ant-menu {
+  .el-menu {
     background: rgba(255, 255, 255, 0.5);
+  }
+  .el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
+  .el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
+  .el-menu--horizontal > .el-submenu .el-submenu__title:hover {
+    background: rgba(255, 251, 192, 0.144);
   }
 }
 </style>

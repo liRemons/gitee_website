@@ -1,63 +1,39 @@
 <template>
   <div class="home">
-    <a-card hoverable style="width: 300px; margin-top: 20px">
-      <template class="ant-card-actions" #actions>
-        <a-popover
-          v-for="item in contactOption"
-          :key="item.img"
-          v-model:visible="item.visible"
-          trigger="click"
-          placement="left"
-        >
-          <template #content>
-            <img
-              :src="require(`@/assets/img/${item.img}.png`)"
-              style="width: 250px"
-            />
-          </template>
-          <component :is="item.icon"></component>
-        </a-popover>
-      </template>
+    <el-card class="box-card">
       <div class="card_body">
-        <a-avatar :src="require('@/assets/img/avatar.jpg')" :size="80" />
+        <el-avatar :src="require('@/assets/img/avatar.jpg')" :size="80" />
         <div style="padding-left: 20px">
           <div class="name">李润泉</div>
           <div class="introduce">前端开发工程师</div>
         </div>
       </div>
-      <a-list size="small" bordered :data-source="data">
-        <template #renderItem="{ item, index }">
-          <a-list-item>
-            <component :is="item.icon"></component>
-            {{ item.introduce }}
-          </a-list-item>
-        </template>
-      </a-list>
-    </a-card>
+      <div class="list">
+        <p v-for="item in data" :key="item.introduce">
+          <i :class="item.icon"></i>
+          {{ item.introduce }}
+        </p>
+      </div>
+      <div class="foot">
+        <el-popover placement="right" v-for="item in contactOption">
+          <template #reference>
+            <img
+              class="icon"
+              :src="require(`@/assets/img/${item.icon}.png`)"
+              alt=""
+            />
+          </template>
+          <img :src="require(`@/assets/img/${item.img}QR.png`)" alt="" />
+        </el-popover>
+      </div>
+    </el-card>
   </div>
 </template>
 
 <script lang="ts">
-import {
-  WechatOutlined,
-  QqOutlined,
-  DingdingOutlined,
-  MailOutlined,
-  WhatsAppOutlined,
-  HistoryOutlined,EnvironmentOutlined,HomeOutlined
-} from "@ant-design/icons-vue";
 import { defineComponent, reactive, toRefs, getCurrentInstance } from "vue";
 
 export default defineComponent({
-  components: {
-    DingdingOutlined,
-    WechatOutlined,
-    QqOutlined,
-    MailOutlined,
-    WhatsAppOutlined,
-    HistoryOutlined,
-    EnvironmentOutlined,HomeOutlined
-  },
   setup() {
     const initialTime = new Date("2018-03-12").getTime();
     const nowTime = new Date().getTime();
@@ -71,19 +47,22 @@ export default defineComponent({
       12
     ).toFixed(2);
     const year = parseInt(count);
-    const month = Math.ceil((count.split(".")[1] ) * 0.12);
+    const month = Math.ceil(count.split(".")[1] * 0.12);
     const state = reactive({
       contactOption: [
-        { icon: "WechatOutlined", visible: false, img: "weChat" },
-        { icon: "QqOutlined", visible: false, img: "QQ" },
-        { icon: "DingdingOutlined", visible: false, img: "ding" },
+        { icon: "wechat", visible: false, img: "weChat" },
+        { icon: "qq", visible: false, img: "QQ" },
+        { icon: "dingTalk", visible: false, img: "ding" },
       ],
       data: [
-        { icon: "MailOutlined", introduce: "remons@foxmail.com" },
-        { icon: "WhatsAppOutlined", introduce: "15563043705" },
-        { icon: "HistoryOutlined", introduce: `码龄：${year} 年 ${month} 个月` },
-        { icon: "EnvironmentOutlined", introduce: '工作地：浙江 杭州' },
-        { icon: "HomeOutlined", introduce: '故乡：山东 菏泽' },
+        { icon: "el-icon-message", introduce: "remons@foxmail.com" },
+        { icon: "el-icon-phone-outline", introduce: "15563043705" },
+        {
+          icon: "el-icon-timer",
+          introduce: `码龄：${year} 年 ${month} 个月`,
+        },
+        { icon: "el-icon-place", introduce: "工作地：浙江 杭州" },
+        { icon: "el-icon-house", introduce: "故乡：山东 菏泽" },
       ],
     });
     return {
@@ -96,9 +75,11 @@ export default defineComponent({
 <style scoped lang="less">
 .home {
   width: 100%;
+  margin-top:50px;
   display: flex;
   justify-content: space-around;
   .card_body {
+    padding: 0 30px;
     display: flex;
     align-items: center;
     .name {
@@ -109,12 +90,35 @@ export default defineComponent({
     }
     .introduce {
       color: #ccc;
+      font-size: 14px;
     }
+  }
+  .list {
+    padding: 0 30px;
+  }
+  .foot {
+    width: 280px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: #fafafa;
+  }
+  .icon {
+    height: 22px;
+    cursor: pointer;
   }
 }
 ::v-deep {
-  .ant-list-bordered {
-    border: none;
+  .el-card__body {
+    padding: 0;
+    padding-top: 20px;
+  }
+  .el-card {
+    border-radius: 0;
+  }
+  .el-popover {
+    width: 300px !important;
   }
 }
 </style>
