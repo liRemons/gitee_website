@@ -80,7 +80,7 @@ export default defineComponent({
   overflow: hidden;
   .main {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 61px);
     overflow: auto;
     top: 61px;
     position: absolute;

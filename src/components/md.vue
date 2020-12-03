@@ -1,14 +1,40 @@
 <template>
   <div class="flex">
     <div class="author">
-      <p
-        class="childNode"
-        v-for="item in authorList"
-        :key="item.name"
-        @click="scrollTo(item)"
+      <el-menu
+        default-active="2"
+        class="el-menu-vertical-demo"
+        @select="scrollTo"
       >
-        {{ item.name }}
-      </p>
+        <div v-for="item in authorList">
+          <el-submenu :index="item.index" v-if="item.childNode.length">
+            <template #title>
+              <div v-html="item.parentNode"></div>
+            </template>
+            <div v-for="a in item.childNode">
+              <el-submenu
+                :index="a.index"
+                v-if="a.childNode && a.childNode.length"
+              >
+                <template #title><div v-html="a.parentNode"></div></template>
+                <el-menu-item
+                  :index="c.index"
+                  v-for="c in a.childNode"
+                  v-html="c.parentNode"
+                ></el-menu-item>
+              </el-submenu>
+              <el-menu-item :index="a.index" v-else>
+                <div v-html="a.parentNode"></div>
+              </el-menu-item>
+            </div>
+          </el-submenu>
+          <el-menu-item :index="item.index" v-else>
+            <template #title>
+              <div v-html="item.parentNode"></div>
+            </template>
+          </el-menu-item>
+        </div>
+      </el-menu>
     </div>
     <div class="md" v-html="html[routerName]"></div>
   </div>
@@ -31,6 +57,7 @@ import HTML_CSS from "@/assets/js/HTML_CSS";
 import TypeScript from "@/assets/js/TypeScript";
 export default defineComponent({
   setup() {
+    let list: any = [];
     const { proxy }: any = getCurrentInstance();
     const state = reactive({
       html: { JS, Vue, React, HTML_CSS, TypeScript },
@@ -41,6 +68,7 @@ export default defineComponent({
       () => proxy.$route,
       (router, prev) => {
         state.routerName = router.name;
+        state.authorList = [];
         proxy.$nextTick(() => {
           init();
         });
@@ -51,22 +79,90 @@ export default defineComponent({
     });
 
     const init = () => {
-      state.authorList = [];
-      let mdHeader: any = document.querySelectorAll(
+      let mdHeader: any = [];
+
+      mdHeader = document.querySelectorAll(
         ".md-header-anchor"
       ) as NodeListOf<Element>;
       mdHeader.forEach((item: any) => {
-        state.authorList.push({
-          name: item.name,
-          parentNode: item.parentNode.nodeName,
-          offsetTop: item.parentNode.offsetTop,
-        });
+        if (!["H1", "H2"].includes(item.parentNode.nodeName)) {
+          list.push({
+            name: item.name,
+            nodeName: item.parentNode.nodeName,
+            parentNode: item.parentNode.outerHTML,
+            offsetTop: item.parentNode.offsetTop,
+          });
+        }
       });
+      let H3: any = [],
+        H4: any = [],
+        H5: any = [],
+        H6: any = [];
+      list.forEach((item: any, index: number) => {
+        item.nodeName === "H3" && H3.push(index);
+        item.nodeName === "H4" && H4.push(index);
+        item.nodeName === "H5" && H5.push(index);
+        item.nodeName === "H6" && H6.push(index);
+      });
+
+      let arr5: any = getArr(H4, H5);
+      let arr4: any = getArr(H3, arr5);
+      let eleArr = arr4.length ? arr4 : arr5;
+      function initData(arr: any) {
+        arr.forEach((item: any) => {
+          item.name = list[item.index].name;
+          item.nodeName = list[item.index].nodeName;
+          item.parentNode = list[item.index].parentNode;
+          item.offsetTop = list[item.index].offsetTop;
+          item.childNode = [];
+          item.children.forEach((a: any) => {
+            if (!isNaN(a)) {
+              item.childNode.push({
+                name: list[a].name,
+                nodeName: list[a].nodeName,
+                parentNode: list[a].parentNode,
+                offsetTop: list[a].offsetTop,
+                index: a,
+              });
+            } else {
+              item.childNode.push({
+                index: a.index,
+                name: list[a.index].name,
+                nodeName: list[a.index].nodeName,
+                parentNode: list[a.index].parentNode,
+                offsetTop: list[a.index].offsetTop,
+                childNode: initData([a])[0].childNode,
+              });
+            }
+          });
+        });
+        return arr;
+      }
+
+      state.authorList = initData(eleArr);
+      console.log(eleArr);
     };
 
-    const scrollTo = (data: any) => {
+    const getArr = (bigEle: any, MinEle: any) => {
+      let arr: any = [];
+      bigEle.forEach((item: any, index: number) => {
+        arr[index] = {
+          index: item,
+          children: MinEle.filter((a: any) => {
+            if (index + 1 < bigEle.length + 1) {
+              return (
+                (isNaN(a) ? a.index : a) > item &&
+                (isNaN(a) ? a.index : a) < bigEle[index + 1]
+              );
+            }
+          }),
+        };
+      });
+      return arr;
+    };
+    const scrollTo = (index: any) => {
       let mdEle = document.querySelector(".md") as Element;
-      mdEle.scrollTop = data.offsetTop - 100;
+      mdEle.scrollTop = list[index].offsetTop - 100;
     };
     return {
       ...toRefs(state),
@@ -76,13 +172,38 @@ export default defineComponent({
 });
 </script>
 
+<style src="../assets/css/md.css">
+</style>
 
+<style lang="less">
+.author {
+  h2,
+  h3,
+  h4,
+  h5 {
+    cursor: pointer;
+    margin: 0;
+    padding: 10px 0;
+  }
+  h2 {
+    font-size: 18px !important;
+  }
+  h3 {
+    font-size: 16px !important;
+  }
+  h4 {
+    font-size: 14px !important;
+  }
+  h5 {
+    font-size: 12px !important;
+  }
+}
+</style>
 <style scoped lang="less">
-@import "../assets/css/md.css";
 .author {
   width: 20%;
   overflow: auto;
-  padding: 10px;
+  background: rgba(255, 255, 255, 0.5);
   .childNode {
     margin: 5px;
     cursor: pointer;
@@ -101,5 +222,27 @@ export default defineComponent({
 .md {
   overflow: auto;
   width: 80%;
+}
+
+::v-deep {
+  .el-submenu .el-menu-item {
+    min-width: 100%;
+    height: 100%;
+    white-space: inherit;
+    padding: 0 10px !important;
+  }
+  .el-menu-item,
+  .el-submenu__title {
+    white-space: inherit;
+    height: 100%;
+    line-height: 24px;
+    padding: 0 10px !important;
+  }
+  .el-menu {
+    background: transparent;
+  }
+  .el-menu--inline {
+    // background:transparent
+  }
 }
 </style>
