@@ -2,7 +2,7 @@
   <div class="flex">
     <div class="author">
       <el-menu
-        default-active="2"
+        default-active="0"
         class="el-menu-vertical-demo"
         @select="scrollTo"
       >
