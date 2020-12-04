@@ -50,8 +50,8 @@ export default defineComponent({
     const month = Math.ceil(count.split(".")[1] * 0.12);
     const state = reactive({
       contactOption: [
-        { icon: "weChat", visible: false, img: "weChat" },
-        { icon: "QQ", visible: false, img: "QQ" },
+        { icon: "wechat", visible: false, img: "weChat" },
+        { icon: "qq", visible: false, img: "QQ" },
         { icon: "dingTalk", visible: false, img: "ding" },
       ],
       data: [
