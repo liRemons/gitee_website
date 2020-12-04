@@ -67,6 +67,7 @@ export default defineComponent({
     watch(
       () => proxy.$route,
       (router, prev) => {
+        list = [];
         state.routerName = router.name;
         state.authorList = [];
         proxy.$nextTick(() => {
@@ -140,7 +141,6 @@ export default defineComponent({
       }
 
       state.authorList = initData(eleArr);
-      console.log(eleArr);
     };
 
     const getArr = (bigEle: any, MinEle: any) => {
