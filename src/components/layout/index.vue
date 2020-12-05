@@ -21,7 +21,7 @@
       </div>
     </div>
     <el-button
-      v-if="(NODE_ENV = 'development')"
+      v-if="NODE_ENV === 'development'"
       class="btn"
       type="primary"
       size="mini"
