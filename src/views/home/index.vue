@@ -15,7 +15,12 @@
         </p>
       </div>
       <div class="foot">
-        <el-popover placement="right" v-for="item in contactOption">
+        <el-popover
+          placement="right"
+          trigger="hover"
+          v-for="item in contactOption"
+          :key="item.icon"
+        >
           <template #reference>
             <img
               class="icon"
@@ -75,7 +80,7 @@ export default defineComponent({
 <style scoped lang="less">
 .home {
   width: 100%;
-  margin-top:50px;
+  margin-top: 50px;
   display: flex;
   justify-content: space-around;
   .card_body {

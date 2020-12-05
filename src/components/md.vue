@@ -1,8 +1,14 @@
 <template>
   <div class="flex">
-    <div class="author">
+    <div
+      class="author"
+      v-loading="!authorList.length"
+      element-loading-text="加载目录中..."
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.2)"
+    >
       <el-menu
-        default-active="0"
+        :default-active="menuIndex"
         class="el-menu-vertical-demo"
         @select="scrollTo"
       >
@@ -64,7 +70,10 @@ export default defineComponent({
       html: { JS, Vue, React, HTML_CSS, TypeScript },
       routerName: proxy.$route.name,
       authorList: <any>[],
+      menuIndex: 0,
+      scrollList: [],
     });
+
     watch(
       () => proxy.$route,
       (router, prev) => {
@@ -77,12 +86,13 @@ export default defineComponent({
       }
     );
     onMounted(() => {
+      let MdEle: any = document.querySelector(".md");
+      MdEle.onscroll = debonce(scroll, 500); // 每隔 0.5s 输出
       init();
     });
 
-    const init = () => {
+    const createHeader = () => {
       let mdHeader: any = [];
-
       mdHeader = document.querySelectorAll(
         ".md-header-anchor"
       ) as NodeListOf<Element>;
@@ -96,6 +106,7 @@ export default defineComponent({
           });
         }
       });
+      state.scrollList = list.map((item: any) => item.offsetTop);
       let H3: any = [],
         H4: any = [],
         H5: any = [],
@@ -160,6 +171,27 @@ export default defineComponent({
         };
       });
       return arr;
+    };
+
+    const init = () => {
+      setTimeout(() => {
+        createHeader();
+      }, 1000);
+    };
+
+    const debonce = (fn: any, delay: number) => {
+      let time: any = null;
+      return () => {
+        if (time) {
+          clearTimeout(time);
+        }
+        time = setTimeout(fn, delay);
+      };
+    };
+    const scroll = () => {
+      let MdEle: any = document.querySelector(".md");
+      let scrollTop = MdEle.scrollTop || document.documentElement.scrollTop;
+      state.menuIndex = state.scrollList.findIndex((item) => item > scrollTop);
     };
     const scrollTo = (index: any) => {
       let mdEle = document.querySelector(".md") as Element;
