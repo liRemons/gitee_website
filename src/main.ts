@@ -18,4 +18,5 @@ app.config.globalProperties.$api = api
 app.config.globalProperties.$utils = methods
 app.config.globalProperties.$store = useStore()
 app.config.globalProperties.$route = useRoute()
+app.config.globalProperties.NODE_ENV = process.env.NODE_ENV
 app.use(store).use(router).use(ElementPlus).mount('#app')

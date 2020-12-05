@@ -4,3 +4,4 @@ declare module '*.vue' {
   export default component
 }
 declare module 'methods-remons'
+declare module 'file-saver'

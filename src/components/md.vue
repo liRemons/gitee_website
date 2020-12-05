@@ -37,6 +37,7 @@
       </el-menu>
     </div>
     <div class="md" v-html="html[routerName]"></div>
+    <el-backtop target=".md"></el-backtop>
   </div>
 </template>
 
