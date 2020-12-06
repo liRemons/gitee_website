@@ -3,7 +3,6 @@
     <div class="bgchild">
       <Layout></Layout>
     </div>
-     <div class="loading" v-if="state.Loading.loading"><a-spin size="large"/></div>
   </div>
 </template>
 
@@ -16,11 +15,10 @@ export default defineComponent({
   },
   setup() {
     const { proxy }: any = getCurrentInstance();
-    const { state }: any = proxy.$store;
     if (!proxy.$utils.IsPC()) {
-      // window.location.href = "http://www.xtroms.com";
+      window.location.href = "https://remons.gitee.io/fe_mobile/";
     }
-    return {state};
+    return {};
   },
 });
 </script>
