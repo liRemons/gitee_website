@@ -7,8 +7,7 @@ interface Iservice {
   [propName: string]: any
 }
 const service: Iservice = axios.create({
-  baseURL: "/api", //process.env.  可以配置环境变量进行获取
-  // baseURL: "http://192.168.1.11:8888", //process.env.  可以配置环境变量进行获取
+  baseURL: process.env.NODE_ENV === 'development' ? "/api" : '/feq',
   timeout: 20000, //请求超时的时间
 });
 // request拦截器,在请求之前做一些处理
