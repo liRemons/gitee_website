@@ -1,10 +1,13 @@
 import axios from "axios";
-import store from '../store'
+import { ElLoading } from 'element-plus'
+const options = {
+  background: 'rgba(0,0,0,0.2)'
+}
 interface Iservice {
   [propName: string]: any
 }
 const service: Iservice = axios.create({
-  baseURL: "http://127.0.0.1:3000", //process.env.  可以配置环境变量进行获取
+  baseURL: "/api", //process.env.  可以配置环境变量进行获取
   // baseURL: "http://192.168.1.11:8888", //process.env.  可以配置环境变量进行获取
   timeout: 20000, //请求超时的时间
 });
@@ -12,7 +15,7 @@ const service: Iservice = axios.create({
 service._requestCount = 0; // 接口请求累加
 service.interceptors.request.use(
   (config: any) => {
-   
+
 
     // 如果需要序列化
     // if (config.headers['Content-Type'] === 'application/x-www-form-urlencoded') { //post请求序列化
@@ -20,7 +23,7 @@ service.interceptors.request.use(
     // }
     service._requestCount++;
     // 全局loading
-    store.commit('Loading/openLoading')
+    // ElLoading.service(options);
     return config;
   },
   (error: any) => {
@@ -35,8 +38,8 @@ service.interceptors.response.use(
     service._requestCount--;
     // --是为了让loading消失，因为上面++，所以待成功后让其抵消为0；（下同）
     if (service._requestCount <= 0) {
+      // ElLoading.service(options).close();
       // 如果接口请求累加值小于0 那么关闭loading
-      store.commit('Loading/closeLoading')
     }
     const res = response.data;
     // 返回请求值
@@ -47,7 +50,7 @@ service.interceptors.response.use(
     // 因为接口中没有返回特定状态码，所以没有配置
     service._requestCount--;
     if (service._requestCount <= 0) {
-      store.commit('Loading/closeLoading')
+      // ElLoading.service(options).close();
     }
     Promise.reject(error);
   }

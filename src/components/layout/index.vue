@@ -20,7 +20,7 @@
         ></transition>
       </div>
     </div>
-    <el-button
+    <!-- <el-button
       v-if="NODE_ENV === 'development'"
       class="btn"
       type="primary"
@@ -28,7 +28,7 @@
       icon="el-icon-plus"
       circle
       @click="dialogVisible = true"
-    ></el-button>
+    ></el-button> -->
     <input
       type="file"
       name=""

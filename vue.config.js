@@ -9,5 +9,16 @@ module.exports = {
         args[0].title= 'Remons'
         return args
       })
+  },
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'https://remons.gitee.io/feq',
+        changeOrigin: true, // 允许跨域
+        pathRewrite: { // 重写路径
+          '^/api': '/'
+        }
+      }
+    }
   }
 }

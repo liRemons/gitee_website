@@ -1,11 +1,17 @@
 <template>
-  <div class="flex">
+  <div
+    class="flex"
+    v-loading="!html"
+    element-loading-text="加载页面中..."
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(255,255, 255, 0.4)"
+  >
     <div
       class="author"
       v-loading="!authorList.length"
       element-loading-text="加载目录中..."
       element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(0, 0, 0, 0.2)"
+      element-loading-background="rgba(255,255, 255, 0.2)"
     >
       <el-menu
         :default-active="menuIndex"
@@ -42,7 +48,7 @@
         </div>
       </el-menu>
     </div>
-    <div class="md" v-html="html[routerName]"></div>
+    <div class="md" v-html="html"></div>
     <el-backtop target=".md"></el-backtop>
   </div>
 </template>
@@ -57,18 +63,12 @@ import {
   watch,
 } from "vue";
 import { useRoute } from "vue-router";
-import JS from "@/assets/js/JS";
-import Vue from "@/assets/js/Vue";
-import React from "@/assets/js/React";
-import HTML_CSS from "@/assets/js/HTML_CSS";
-import TypeScript from "@/assets/js/TypeScript";
 export default defineComponent({
   setup() {
     let list: any = [];
     const { proxy }: any = getCurrentInstance();
     const state = reactive({
-      html: { JS, Vue, React, HTML_CSS, TypeScript },
-      routerName: proxy.$route.name,
+      html: "",
       authorList: <any>[],
       menuIndex: 0,
       scrollList: [],
@@ -78,17 +78,25 @@ export default defineComponent({
       () => proxy.$route,
       (router, prev) => {
         list = [];
-        state.routerName = router.name;
         state.authorList = [];
         proxy.$nextTick(() => {
-          init();
+          getFile();
         });
       }
     );
+
+    const getFile = async () => {
+      state.html = "";
+      let res = await proxy.$api.HOME.getFileOption(proxy.$route.name);
+      state.html = res;
+      setTimeout(() => {
+        createHeader();
+      }, 1000);
+    };
     onMounted(() => {
       let MdEle: any = document.querySelector(".md");
       MdEle.onscroll = debonce(scroll, 500); // 每隔 0.5s 输出
-      init();
+      getFile();
     });
 
     const createHeader = () => {
@@ -173,12 +181,6 @@ export default defineComponent({
       return arr;
     };
 
-    const init = () => {
-      setTimeout(() => {
-        createHeader();
-      }, 1000);
-    };
-
     const debonce = (fn: any, delay: number) => {
       let time: any = null;
       return () => {
@@ -204,9 +206,6 @@ export default defineComponent({
   },
 });
 </script>
-
-<style src="../assets/css/md.css">
-</style>
 
 <style lang="less">
 .author {
