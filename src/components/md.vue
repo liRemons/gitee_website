@@ -86,7 +86,6 @@ export default defineComponent({
     );
 
     const getFile = async () => {
-      state.html = "";
       let res = await proxy.$api.HOME.getFileOption(proxy.$route.name);
       state.html = res;
       let timer;
