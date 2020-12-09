@@ -88,7 +88,7 @@ export default defineComponent({
     const getFile = async () => {
       let res = await proxy.$api.HOME.getFileOption(proxy.$route.name);
       state.html = res;
-      let timer;
+      let timer: any = null;
       timer && clearTimeout(timer);
       timer = setTimeout(() => {
         createHeader();
@@ -186,9 +186,7 @@ export default defineComponent({
     const debonce = (fn: any, delay: number) => {
       let time: any = null;
       return () => {
-        if (time) {
-          clearTimeout(time);
-        }
+        time && clearTimeout(time);
         time = setTimeout(fn, delay);
       };
     };
