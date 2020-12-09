@@ -89,7 +89,9 @@ export default defineComponent({
       state.html = "";
       let res = await proxy.$api.HOME.getFileOption(proxy.$route.name);
       state.html = res;
-      setTimeout(() => {
+      let timer;
+      timer && clearTimeout(timer);
+      timer = setTimeout(() => {
         createHeader();
       }, 1000);
     };
@@ -100,6 +102,7 @@ export default defineComponent({
     });
 
     const createHeader = () => {
+      state.authorList = [];
       let mdHeader: any = [];
       mdHeader = document.querySelectorAll(
         ".md-header-anchor"
