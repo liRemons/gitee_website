@@ -14,12 +14,18 @@
       element-loading-background="rgba(255,255, 255, 0.2)"
     >
       <el-menu
+        v-if="authorList.length"
+        :default-openeds="[0]"
+        unique-opened
         :default-active="menuIndex"
         class="el-menu-vertical-demo"
         @select="scrollTo"
       >
         <div v-for="item in authorList">
-          <el-submenu :index="item.index" v-if="item.childNode.length">
+          <el-submenu
+            :index="item.index"
+            v-if="item.childNode && item.childNode.length"
+          >
             <template #title>
               <div v-html="item.parentNode"></div>
             </template>
@@ -78,6 +84,7 @@ export default defineComponent({
       () => proxy.$route,
       (router, prev) => {
         list = [];
+
         state.authorList = [];
         proxy.$nextTick(() => {
           getFile();
@@ -86,6 +93,7 @@ export default defineComponent({
     );
 
     const getFile = async () => {
+      state.html = "";
       let res = await proxy.$api.HOME.getFileOption(proxy.$route.name);
       state.html = res;
       let timer: any = null;
@@ -103,9 +111,9 @@ export default defineComponent({
     const createHeader = () => {
       state.authorList = [];
       let mdHeader: any = [];
-      mdHeader = document.querySelectorAll(".md-header-anchor") as NodeListOf<
-        Element
-      >;
+      mdHeader = document.querySelectorAll(
+        ".md-header-anchor"
+      ) as NodeListOf<Element>;
       mdHeader.forEach((item: any) => {
         if (!["H1", "H2"].includes(item.parentNode.nodeName)) {
           list.push({
@@ -186,7 +194,19 @@ export default defineComponent({
     const scroll = () => {
       let MdEle: any = document.querySelector(".md");
       let scrollTop = MdEle.scrollTop || document.documentElement.scrollTop;
-      state.menuIndex = state.scrollList.findIndex((item) => item > scrollTop);
+      state.menuIndex = state.scrollList.findIndex(
+        (item: any) => item > scrollTop
+      );
+      proxy.$nextTick(() => {
+        let header: any = document.querySelector(
+          ".author .el-menu-item.is-active"
+        ) as Element;
+
+        if (header) {
+          let authorEle = document.querySelector(".author") as Element;
+          authorEle.scrollTop = header.offsetTop ;
+        }
+      });
     };
     const scrollTo = (index: any) => {
       let mdEle = document.querySelector(".md") as Element;
