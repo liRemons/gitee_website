@@ -96,16 +96,16 @@ export default defineComponent({
     };
     onMounted(() => {
       let MdEle: any = document.querySelector(".md");
-      MdEle.onscroll = debonce(scroll, 500); // 每隔 0.5s 输出
+      proxy.$utils.watchScroll(scroll, 500, MdEle); // 每隔 0.5s 输出
       getFile();
     });
 
     const createHeader = () => {
       state.authorList = [];
       let mdHeader: any = [];
-      mdHeader = document.querySelectorAll(
-        ".md-header-anchor"
-      ) as NodeListOf<Element>;
+      mdHeader = document.querySelectorAll(".md-header-anchor") as NodeListOf<
+        Element
+      >;
       mdHeader.forEach((item: any) => {
         if (!["H1", "H2"].includes(item.parentNode.nodeName)) {
           list.push({
@@ -183,13 +183,6 @@ export default defineComponent({
       return arr;
     };
 
-    const debonce = (fn: any, delay: number) => {
-      let time: any = null;
-      return () => {
-        time && clearTimeout(time);
-        time = setTimeout(fn, delay);
-      };
-    };
     const scroll = () => {
       let MdEle: any = document.querySelector(".md");
       let scrollTop = MdEle.scrollTop || document.documentElement.scrollTop;
