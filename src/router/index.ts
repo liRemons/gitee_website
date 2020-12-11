@@ -57,7 +57,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/node',
     name: 'Node',
-    component: () => import('@/views/node/index.vue'),
+    component: () => import('@/components/md.vue'),
     meta:{
       title:'Node',
       icon:''
@@ -66,7 +66,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/electron',
     name: 'Electron',
-    component: () => import('@/views/electron/index.vue'),
+    component: () => import('@/components/md.vue'),
     meta:{
       title:'Electron',
       icon:''
