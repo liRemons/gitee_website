@@ -122,8 +122,11 @@ export default defineComponent({
   .el-card {
     border-radius: 0;
   }
-  .el-popover {
-    width: 300px !important;
-  }
+}
+</style>
+
+<style >
+.el-popover.el-popper {
+  width: inherit !important;
 }
 </style>
