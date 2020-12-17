@@ -1,16 +1,18 @@
+const path = require('path')
 module.exports = {
   indexPath: "index.html",
   assetsDir: "./static",
   productionSourceMap: false,
-  publicPath:'././',
+  publicPath: '././',
   chainWebpack: config => {
     config
       .plugin('html')
       .tap(args => {
-        args[0].title= 'Remons'
+        args[0].title = 'Remons'
         return args
       })
   },
+
   devServer: {
     proxy: {
       '/api': {
@@ -20,6 +22,16 @@ module.exports = {
           '^/api': '/'
         }
       }
+    }
+  },
+  pluginOptions: {
+    'copy-webpack-plugin': {
+      patterns: [
+        {
+          from: path.join(__dirname, 'public/.spa'),
+          to: 'dist/'
+        }
+      ],
     }
   }
 }

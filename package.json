@@ -9,7 +9,9 @@
     },
     "dependencies": {
         "axios": "^0.21.0",
+        "copy-webpack-plugin": "^7.0.0",
         "element-plus": "^1.0.1-beta.0",
+        "generate-asset-webpack-plugin": "^0.3.0",
         "methods-r": "^1.1.1",
         "normalize.css": "^8.0.1",
         "vue": "^3.0.0",
