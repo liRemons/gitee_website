@@ -20,6 +20,26 @@
         ></transition>
       </div>
     </div>
+    <div class="left">
+      <el-popover
+        placement="left"
+        trigger="hover"
+        width="100"
+        v-for="item in iconOptions"
+      >
+        <template #reference>
+          <div class="icon">
+            <img :src="$img + item.name + '_icon.png'" alt="" />
+          </div>
+        </template>
+        <img
+          class="qr"
+          style="width: 120px"
+          :src="$img + item.qr + '.png'"
+          alt=""
+        />
+      </el-popover>
+    </div>
   </div>
 </template>
 
@@ -41,6 +61,10 @@ export default defineComponent({
     const state: any = reactive({
       current: "/",
       routes: routes,
+      iconOptions: [
+        { name: "mini", qr: "mini" },
+        { name: "h5", qr: "fe_h5" },
+      ],
     });
 
     watch(
@@ -57,11 +81,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="less">
-.btn {
-  position: fixed;
-  top: 10px;
-  right: 0;
-}
 .layout_flex {
   display: flex;
   flex-direction: column;
@@ -74,11 +93,25 @@ export default defineComponent({
     position: absolute;
   }
 }
-
-.add {
+.left {
   position: fixed;
-  right: 0;
-  top: 10px;
+  right: 20px;
+  bottom: 200px;
+  .icon {
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: 10px;
+    img {
+      max-width: 100%;
+    }
+    // background: #fff;
+  }
+  .qr {
+    // max-width: 120px;
+  }
 }
 ::v-deep {
   .el-menu {

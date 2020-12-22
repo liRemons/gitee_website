@@ -15,6 +15,7 @@ import api from './api'
 app.component('Empty', Empty)
 app.component('MD', MD)
 app.config.globalProperties.$api = api
+app.config.globalProperties.$img = 'https://remons.gitee.io/feq/summarize/website/assets/img/'
 app.config.globalProperties.$utils = methods
 app.config.globalProperties.$store = useStore()
 app.config.globalProperties.$route = useRoute()

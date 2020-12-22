@@ -2,7 +2,7 @@
   <div class="home">
     <el-card class="box-card">
       <div class="card_body">
-        <el-avatar :src="require('@/assets/img/avatar.jpg')" :size="80" />
+        <el-avatar :src="$img + 'avatar.jpg'" :size="80" />
         <div style="padding-left: 20px">
           <div class="name">李润泉</div>
           <div class="introduce">前端开发工程师</div>
@@ -16,19 +16,17 @@
       </div>
       <div class="foot">
         <el-popover
+          width="200"
+          class="foot_popover"
           placement="right"
           trigger="hover"
           v-for="item in contactOption"
           :key="item.icon"
         >
           <template #reference>
-            <img
-              class="icon"
-              :src="require(`@/assets/img/${item.icon}.png`)"
-              alt=""
-            />
+            <img class="icon" :src="$img + item.icon + '.png'" alt="" />
           </template>
-          <img :src="require(`@/assets/img/${item.img}QR.png`)" alt="" />
+          <img style="width: 200px" :src="$img + item.img + 'QR.png'" alt="" />
         </el-popover>
       </div>
     </el-card>
@@ -126,7 +124,10 @@ export default defineComponent({
 </style>
 
 <style >
-.el-popover.el-popper {
+/* .foot_popover {
   width: inherit !important;
-}
+} */
+/* .el-popover.el-popper img{
+  max-width: 100px;
+} */
 </style>

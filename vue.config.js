@@ -3,7 +3,7 @@ module.exports = {
   indexPath: "index.html",
   assetsDir: "./static",
   productionSourceMap: false,
-  publicPath: '././',
+  publicPath: process.env.NODE_ENV === 'production' ? '././':'',
   chainWebpack: config => {
     config
       .plugin('html')
