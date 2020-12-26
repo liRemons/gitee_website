@@ -4800,10 +4800,10 @@ merge2@^1.2.3, merge2@^1.3.0:
   resolved "https://registry.npm.taobao.org/merge2/download/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha1-Q2iJL4hekHRVpv19xVwMnUBJkK4=
 
-methods-r@^1.1.1:
-  version "1.1.2"
-  resolved "https://registry.npmjs.org/methods-r/-/methods-r-1.1.2.tgz#6e21770ae4916be8ef6f64eb42dd5755f7fb591a"
-  integrity sha512-2DuM3HV21+jZs4JU3R0lObCPxHqdtEET+kkH9twdoikF46fh2Mu9CA+JVDTVFS7dMhXxZ6gavhdnSa9884H1yg==
+methods-r@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.npm.taobao.org/methods-r/download/methods-r-1.1.6.tgz#62fc0fc66a7c350b2683aafc4c4e83bad0d510d1"
+  integrity sha1-YvwPxmp8NQsmg6r8TE6DutDVENE=
   dependencies:
     babel-preset-es2015 "^6.24.1"
 

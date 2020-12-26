@@ -33,11 +33,17 @@
           </div>
         </template>
         <img
+          v-if="item.qr"
           class="qr"
           style="width: 120px"
           :src="$img + item.qr + '.png'"
           alt=""
         />
+        <el-input v-else v-model="href">
+          <template #append>
+            <i class="el-icon-copy-document" @click="copy"></i>
+          </template>
+        </el-input>
       </el-popover>
     </div>
   </div>
@@ -61,20 +67,29 @@ export default defineComponent({
     const state: any = reactive({
       current: "/",
       routes: routes,
+      href: window.location.href,
       iconOptions: [
         { name: "mini", qr: "mini" },
         { name: "h5", qr: "fe_h5" },
+        { name: "share", qr: "" },
       ],
     });
 
     watch(
       () => proxy.$route,
       ($route, prev) => {
+        state.href = window.location.href
         state.current = $route.path;
       }
     );
+    const copy = () => {
+
+      proxy.$utils.copy(state.href);
+      proxy.$message.success('复制成功')
+    };
     return {
       ...toRefs(state),
+      copy,
     };
   },
 });
@@ -98,16 +113,21 @@ export default defineComponent({
   right: 20px;
   bottom: 200px;
   .icon {
+    background: #fff;
     cursor: pointer;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
     border-radius: 50%;
     width: 40px;
     height: 40px;
     margin-top: 10px;
+    text-align: center;
+    line-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
     img {
-      max-width: 100%;
+      width: 30px;
     }
-    // background: #fff;
   }
   .qr {
     // max-width: 120px;

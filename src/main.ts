@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router'
 import store from './store'
 import methods from 'methods-r'
 import ElementPlus from 'element-plus';
+import { ElMessage } from 'element-plus'
 import 'normalize.css/normalize.css'
 import 'element-plus/lib/theme-chalk/index.css';
 import MD from '@/components/md.vue'
@@ -19,5 +20,6 @@ app.config.globalProperties.$img = 'https://remons.gitee.io/feq/summarize/websit
 app.config.globalProperties.$utils = methods
 app.config.globalProperties.$store = useStore()
 app.config.globalProperties.$route = useRoute()
+app.config.globalProperties.$message =ElMessage 
 app.config.globalProperties.NODE_ENV = process.env.NODE_ENV
 app.use(store).use(router).use(ElementPlus).mount('#app')
