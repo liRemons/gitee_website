@@ -6,21 +6,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, getCurrentInstance, onMounted } from "vue";
+<script >
+import { getCurrentInstance, onMounted } from "vue";
 import Layout from "@/components/layout/index.vue";
-export default defineComponent({
+export default {
   components: {
     Layout,
   },
   setup() {
-    const { proxy }: any = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     if (!proxy.$utils.IsPC()) {
       window.location.href = "https://remons.gitee.io/fe_mobile/";
     }
     return {};
   },
-});
+};
 </script>
 
 <style scoped lang="less">

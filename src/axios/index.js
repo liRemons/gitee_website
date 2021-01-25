@@ -1,21 +1,17 @@
 import axios from "axios";
-import { ElLoading } from 'element-plus'
+import { ElLoading } from "element-plus";
 const options = {
-  background: 'rgba(0,0,0,0.2)'
-}
-interface Iservice {
-  [propName: string]: any
-}
-const service: Iservice = axios.create({
-  baseURL: process.env.NODE_ENV === 'development' ? "/api" : '/feq',
+  background: "rgba(0,0,0,0.2)",
+};
+
+const service = axios.create({
+  baseURL: process.env.NODE_ENV === "development" ? "/api" : "/feq",
   timeout: 20000, //请求超时的时间
 });
 // request拦截器,在请求之前做一些处理
 service._requestCount = 0; // 接口请求累加
 service.interceptors.request.use(
-  (config: any) => {
-
-
+  (config) => {
     // 如果需要序列化
     // if (config.headers['Content-Type'] === 'application/x-www-form-urlencoded') { //post请求序列化
     //   config.data = qs.stringify(config.data);
@@ -25,7 +21,7 @@ service.interceptors.request.use(
     // ElLoading.service(options);
     return config;
   },
-  (error: any) => {
+  (error) => {
     console.log(error);
     Promise.reject(error);
   }
@@ -33,7 +29,7 @@ service.interceptors.request.use(
 
 // response 拦截器,数据返回后进行一些处理
 service.interceptors.response.use(
-  (response: any) => {
+  (response) => {
     service._requestCount--;
     // --是为了让loading消失，因为上面++，所以待成功后让其抵消为0；（下同）
     if (service._requestCount <= 0) {
@@ -44,7 +40,7 @@ service.interceptors.response.use(
     // 返回请求值
     return res;
   },
-  (error: any) => {
+  (error) => {
     // 如果接口出错，当然，也可以根据错误的状态码进行错误信息配置，
     // 因为接口中没有返回特定状态码，所以没有配置
     service._requestCount--;
@@ -54,6 +50,5 @@ service.interceptors.response.use(
     Promise.reject(error);
   }
 );
-
 
 export default { service };

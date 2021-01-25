@@ -59,23 +59,22 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import {
-  defineComponent,
   reactive,
   toRefs,
   onMounted,
   getCurrentInstance,
   watch,
+  onBeforeUnmount,
 } from "vue";
-import { useRoute } from "vue-router";
-export default defineComponent({
+export default {
   setup() {
-    let list: any = [];
-    const { proxy }: any = getCurrentInstance();
+    let list = [];
+    const { proxy } = getCurrentInstance();
     const state = reactive({
       html: "",
-      authorList: <any>[],
+      authorList: [],
       menuIndex: 0,
       scrollList: [],
     });
@@ -84,37 +83,38 @@ export default defineComponent({
       () => proxy.$route,
       (router, prev) => {
         list = [];
-
         state.authorList = [];
-        proxy.$nextTick(() => {
+        if(router.query.id){
+          proxy.$nextTick(() => {
           getFile();
         });
+        }
+        
+        
       }
     );
 
     const getFile = async () => {
       state.html = "";
-      let res = await proxy.$api.HOME.getFileOption(proxy.$route.name);
+      let res = await proxy.$api.HOME.getFileOption(proxy.$route.query.id);
       state.html = res;
-      let timer: any = null;
+      let timer = null;
       timer && clearTimeout(timer);
       timer = setTimeout(() => {
         createHeader();
       }, 1000);
     };
     onMounted(() => {
-      let MdEle: any = document.querySelector(".md");
+      let MdEle = document.querySelector(".md");
       proxy.$utils.watchScroll(scroll, 500, MdEle); // 每隔 0.5s 输出
       getFile();
     });
 
     const createHeader = () => {
       state.authorList = [];
-      let mdHeader: any = [];
-      mdHeader = document.querySelectorAll(
-        ".md-header-anchor"
-      ) as NodeListOf<Element>;
-      mdHeader.forEach((item: any) => {
+      let mdHeader = [];
+      mdHeader = document.querySelectorAll(".md-header-anchor");
+      mdHeader.forEach((item) => {
         if (!["H1", "H2"].includes(item.parentNode.nodeName)) {
           list.push({
             name: item.name,
@@ -124,29 +124,29 @@ export default defineComponent({
           });
         }
       });
-      state.scrollList = list.map((item: any) => item.offsetTop);
-      let H3: any = [],
-        H4: any = [],
-        H5: any = [],
-        H6: any = [];
-      list.forEach((item: any, index: number) => {
+      state.scrollList = list.map((item) => item.offsetTop);
+      let H3 = [],
+        H4 = [],
+        H5 = [],
+        H6 = [];
+      list.forEach((item, index) => {
         item.nodeName === "H3" && H3.push(index);
         item.nodeName === "H4" && H4.push(index);
         item.nodeName === "H5" && H5.push(index);
         item.nodeName === "H6" && H6.push(index);
       });
 
-      let arr5: any = getArr(H4, H5);
-      let arr4: any = getArr(H3, arr5);
+      let arr5 = getArr(H4, H5);
+      let arr4 = getArr(H3, arr5);
       let eleArr = arr4.length ? arr4 : arr5;
-      function initData(arr: any) {
-        arr.forEach((item: any) => {
+      function initData(arr) {
+        arr.forEach((item) => {
           item.name = list[item.index].name;
           item.nodeName = list[item.index].nodeName;
           item.parentNode = list[item.index].parentNode;
           item.offsetTop = list[item.index].offsetTop;
           item.childNode = [];
-          item.children.forEach((a: any) => {
+          item.children.forEach((a) => {
             if (!isNaN(a)) {
               item.childNode.push({
                 name: list[a].name,
@@ -173,12 +173,12 @@ export default defineComponent({
       state.authorList = initData(eleArr);
     };
 
-    const getArr = (bigEle: any, MinEle: any) => {
-      let arr: any = [];
-      bigEle.forEach((item: any, index: number) => {
+    const getArr = (bigEle, MinEle) => {
+      let arr = [];
+      bigEle.forEach((item, index) => {
         arr[index] = {
           index: item,
-          children: MinEle.filter((a: any) => {
+          children: MinEle.filter((a) => {
             if (index + 1 < bigEle.length + 1) {
               return (
                 (isNaN(a) ? a.index : a) > item &&
@@ -192,24 +192,20 @@ export default defineComponent({
     };
 
     const scroll = () => {
-      let MdEle: any = document.querySelector(".md");
+      let MdEle = document.querySelector(".md");
       let scrollTop = MdEle.scrollTop || document.documentElement.scrollTop;
-      state.menuIndex = state.scrollList.findIndex(
-        (item: any) => item > scrollTop
-      );
+      state.menuIndex = state.scrollList.findIndex((item) => item > scrollTop);
       proxy.$nextTick(() => {
-        let header: any = document.querySelector(
-          ".author .el-menu-item.is-active"
-        ) as Element;
+        let header = document.querySelector(".author .el-menu-item.is-active");
 
         if (header) {
-          let authorEle = document.querySelector(".author") as Element;
-          authorEle.scrollTop = header.offsetTop ;
+          let authorEle = document.querySelector(".author");
+          authorEle.scrollTop = header.offsetTop;
         }
       });
     };
-    const scrollTo = (index: any) => {
-      let mdEle = document.querySelector(".md") as Element;
+    const scrollTo = (index) => {
+      let mdEle = document.querySelector(".md");
       mdEle.scrollTop = list[index].offsetTop - 100;
     };
     return {
@@ -217,7 +213,7 @@ export default defineComponent({
       scrollTo,
     };
   },
-});
+};
 </script>
 
 <style lang="less">

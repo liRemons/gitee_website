@@ -33,14 +33,14 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs, getCurrentInstance } from "vue";
+<script>
+import { reactive, toRefs, getCurrentInstance } from "vue";
 
-export default defineComponent({
+export default {
   setup() {
     const initialTime = new Date("2018-03-12").getTime();
     const nowTime = new Date().getTime();
-    const count: any = (
+    const count = (
       (nowTime - initialTime) /
       1000 /
       60 /
@@ -72,7 +72,7 @@ export default defineComponent({
       ...toRefs(state),
     };
   },
-});
+};
 </script>
 
 <style scoped lang="less">

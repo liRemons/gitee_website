@@ -2,16 +2,20 @@
   <div>
     <div class="layout_flex">
       <el-menu
-        router
         :default-active="current"
         class="el-menu-demo"
         mode="horizontal"
+        router
       >
         <el-menu-item
-          :index="item.path"
-          v-for="item in routes"
+          :index="item.id"
+          v-for="item in menu"
           :key="item.path"
-          >{{ item.meta.title }}</el-menu-item
+          :route="{
+            path: item.path,
+            query: { id: item.id },
+          }"
+          >{{ item.title }}</el-menu-item
         >
       </el-menu>
       <div class="main">
@@ -25,6 +29,7 @@
         placement="left"
         trigger="hover"
         width="100"
+        :key="item.name"
         v-for="item in iconOptions"
       >
         <template #reference>
@@ -49,50 +54,50 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import router from "@/router";
-import {
-  defineComponent,
-  reactive,
-  toRefs,
-  getCurrentInstance,
-  watch,
-} from "vue";
-export default defineComponent({
-  components: {},
+import { reactive, toRefs, getCurrentInstance, watch } from "vue";
+export default {
   setup() {
-    const { proxy }: any = getCurrentInstance();
-    let { options } = router;
-    const { routes } = options;
-    const state: any = reactive({
+    const { proxy } = getCurrentInstance();
+    const state = reactive({
       current: "/",
-      routes: routes,
       href: window.location.href,
       iconOptions: [
         { name: "mini", qr: "mini" },
         { name: "h5", qr: "fe_h5" },
         { name: "share", qr: "" },
       ],
+      menu: [
+        { title: "首页", id: "", path: "/" },
+        { title: "html/css", id: "HTML_CSS", path: "/markdown" },
+        { title: "JS", id: "JS", path: "/markdown" },
+        { title: "Vue", id: "Vue", path: "/markdown" },
+        { title: "React", id: "React", path: "/markdown" },
+        { title: "TypeScript", id: "TypeScript", path: "/markdown" },
+        { title: "Node", id: "Node", path: "/markdown" },
+        { title: "Electron", id: "Electron", path: "/markdown" },
+        { title: "其它", id: "other", path: "/markdown" },
+      ],
     });
 
     watch(
       () => proxy.$route,
       ($route, prev) => {
-        state.href = window.location.href
-        state.current = $route.path;
+        state.href = window.location.href;
+        state.current = $route.query.id;
       }
     );
     const copy = () => {
-
       proxy.$utils.copy(state.href);
-      proxy.$message.success('复制成功')
+      proxy.$message.success("复制成功");
     };
     return {
       ...toRefs(state),
       copy,
     };
   },
-});
+};
 </script>
 
 <style scoped lang="less">

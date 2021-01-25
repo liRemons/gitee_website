@@ -4,10 +4,10 @@ export default {
     loading: false,
   },
   mutations: {
-    openLoading(state: any) {
+    openLoading(state) {
       state.loading = true
     },
-    closeLoading(state: any) {
+    closeLoading(state) {
       state.loading = false
     },
     
