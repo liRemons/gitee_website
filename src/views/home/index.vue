@@ -49,7 +49,7 @@ export default {
       30 /
       12
     ).toFixed(2);
-    const year = parseInt(count),month = 0;
+    let year = parseInt(count),month = 0;
     if (Math.ceil(count.split(".")[1] * 0.12) === 12) {
       year += 1;
     } else {
