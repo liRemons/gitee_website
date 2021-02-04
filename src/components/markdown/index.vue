@@ -13,10 +13,26 @@
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255,255, 255, 0.2)"
     >
+      <el-affix :offset="60" v-if="authorList.length">
+        <el-input
+        size="mini"
+          @change="submit"
+          v-model="title"
+          placeholder="请输入标题"
+        >
+          <template #append>
+            <el-button
+              @click="submit"
+              icon="el-icon-search"
+            ></el-button> </template
+        ></el-input>
+      </el-affix>
+
       <div
         :class="{
           active: item.classActive,
         }"
+        :key="item.outerHTML"
         @click="scrollTo(index)"
         v-for="(item, index) in authorList"
         v-html="item.outerHTML"
@@ -44,17 +60,21 @@ export default {
     const state = reactive({
       html: "",
       authorList: [],
+      title:""
     });
 
     watch(
       () => proxy.$route,
       (router, prev) => {
-        list = [];
-        state.authorList = [];
-        if (router.query.id) {
-          proxy.$nextTick(() => {
-            getFile();
-          });
+        if (router.path + router.query.id !== prev.path + prev.query.id) {
+          state.title = "";
+          list = [];
+          state.authorList = [];
+          if (router.query.id) {
+            proxy.$nextTick(() => {
+              getFile();
+            });
+          }
         }
       }
     );
@@ -77,7 +97,8 @@ export default {
 
     const createHeader = () => {
       let arr = [];
-      document.getElementsByClassName("md-header-anchor").forEach((item) => {
+      list = [];
+      document.querySelectorAll(".md .md-header-anchor").forEach((item) => {
         arr.push({
           outerHTML: item.parentNode.outerHTML,
           innerText: item.parentNode.innerText,
@@ -86,6 +107,7 @@ export default {
           classActive: false,
         });
       });
+
       state.authorList = arr;
       list = arr;
     };
@@ -119,9 +141,22 @@ export default {
       flag = false;
       mdEle.scrollTop = state.authorList[index].offsetTop - 100;
     };
+    const submit = () => {
+      createHeader();
+      if (state.title) {
+        state.authorList = state.authorList.filter((item) =>
+          item.innerText.includes(state.title)
+        );
+        
+      }
+      if(state.authorList.length==0){
+           createHeader();
+        }
+    };
     return {
       ...toRefs(state),
       scrollTo,
+      submit,
     };
   },
 };
@@ -172,7 +207,6 @@ export default {
   width: 20%;
   overflow: auto;
   background: rgba(255, 255, 255, 0.5);
- 
 }
 .flex {
   display: flex;
@@ -185,5 +219,4 @@ export default {
   overflow: auto;
   width: 80%;
 }
-
 </style>
