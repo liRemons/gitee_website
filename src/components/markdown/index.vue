@@ -102,7 +102,7 @@ export default {
           let author = document.querySelector(".author");
           let active = document.querySelector(".author .active");
           Number(active.offsetTop) > window.innerHeight - 150 &&
-            (author.scrollTop = Number(active.offsetTop) + 100);
+            (author.scrollTop = Number(active.offsetTop) - 100);
         });
       }
       flag = true;
@@ -172,13 +172,7 @@ export default {
   width: 20%;
   overflow: auto;
   background: rgba(255, 255, 255, 0.5);
-  .childNode {
-    margin: 5px;
-    cursor: pointer;
-  }
-  .childNode:hover {
-    color: rgb(255, 255, 255);
-  }
+ 
 }
 .flex {
   display: flex;
@@ -192,25 +186,4 @@ export default {
   width: 80%;
 }
 
-::v-deep {
-  .el-submenu .el-menu-item {
-    min-width: 100%;
-    height: 100%;
-    white-space: inherit;
-    padding: 0 10px !important;
-  }
-  .el-menu-item,
-  .el-submenu__title {
-    white-space: inherit;
-    height: 100%;
-    line-height: 24px;
-    padding: 0 10px !important;
-  }
-  .el-menu {
-    background: transparent;
-  }
-  .el-menu--inline {
-    // background:transparent
-  }
-}
 </style>
