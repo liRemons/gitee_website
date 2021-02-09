@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import router from "@/router";
 import { reactive, toRefs, getCurrentInstance, watch } from "vue";
 export default {
   setup() {

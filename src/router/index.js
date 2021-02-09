@@ -12,7 +12,7 @@ const routes = [
   {
     path: "/markdown",
     name: "markdown",
-    component: () => import("@/components/markdown"),
+    component: () => import("@/components/markdown/index.vue"),
   },
 ];
 

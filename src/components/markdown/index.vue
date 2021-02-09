@@ -44,14 +44,7 @@
 </template>
 
 <script>
-import {
-  reactive,
-  toRefs,
-  onMounted,
-  getCurrentInstance,
-  watch,
-  onBeforeUnmount,
-} from "vue";
+import { reactive, toRefs, onMounted, getCurrentInstance, watch } from "vue";
 export default {
   setup() {
     let list = [];
@@ -116,7 +109,6 @@ export default {
     };
 
     const scroll = () => {
-      // author
       if (flag) {
         let MdEle = document.querySelector(".md");
         let scrollTop = MdEle.scrollTop || document.documentElement.scrollTop;

@@ -7,7 +7,7 @@
 </template>
 
 <script >
-import { getCurrentInstance, onMounted } from "vue";
+import { getCurrentInstance } from "vue";
 import Layout from "@/components/layout/index.vue";
 export default {
   components: {

@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, getCurrentInstance } from "vue";
+import { reactive, toRefs } from "vue";
 
 export default {
   setup() {
