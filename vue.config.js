@@ -2,6 +2,7 @@ const path = require('path')
 module.exports = {
   indexPath: "index.html",
   assetsDir: "./static",
+  // publicPath: "/fe_mobile/", //文件访问路径
   productionSourceMap: false,
   publicPath: process.env.NODE_ENV === 'production' ? '././':'',
   chainWebpack: config => {

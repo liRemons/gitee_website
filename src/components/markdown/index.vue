@@ -15,7 +15,7 @@
     >
       <el-affix :offset="60" v-if="authorList.length">
         <el-input
-        size="mini"
+          size="mini"
           @change="submit"
           v-model="title"
           placeholder="请输入标题"
@@ -60,7 +60,7 @@ export default {
     const state = reactive({
       html: "",
       authorList: [],
-      title:""
+      title: "",
     });
 
     watch(
@@ -99,13 +99,15 @@ export default {
       let arr = [];
       list = [];
       document.querySelectorAll(".md .md-header-anchor").forEach((item) => {
-        arr.push({
-          outerHTML: item.parentNode.outerHTML,
-          innerText: item.parentNode.innerText,
-          nodeName: item.parentNode.nodeName,
-          offsetTop: item.parentNode.offsetTop,
-          classActive: false,
-        });
+        if (item.parentNode.nodeName !== "H2") {
+          arr.push({
+            outerHTML: item.parentNode.outerHTML,
+            innerText: item.parentNode.innerText,
+            nodeName: item.parentNode.nodeName,
+            offsetTop: item.parentNode.offsetTop,
+            classActive: false,
+          });
+        }
       });
 
       state.authorList = arr;
@@ -147,11 +149,10 @@ export default {
         state.authorList = state.authorList.filter((item) =>
           item.innerText.includes(state.title)
         );
-        
       }
-      if(state.authorList.length==0){
-           createHeader();
-        }
+      if (state.authorList.length == 0) {
+        createHeader();
+      }
     };
     return {
       ...toRefs(state),
