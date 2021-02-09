@@ -105,6 +105,11 @@ export default {
       });
 
       state.authorList = arr;
+      let menuIndex = proxy.$route.query.index;
+      if (menuIndex) {
+        scrollTo(menuIndex);
+        state.authorList[menuIndex].classActive = true;
+      }
       list = arr;
     };
 
@@ -114,7 +119,10 @@ export default {
         let scrollTop = MdEle.scrollTop || document.documentElement.scrollTop;
         let menuIndex = list.findIndex((item) => item.offsetTop > scrollTop);
         initAuthor();
-        if (menuIndex > 0) state.authorList[menuIndex].classActive = true;
+        if (menuIndex > 0) {
+          state.authorList[menuIndex].classActive = true;
+          changeRouter(menuIndex);
+        }
         proxy.$nextTick(() => {
           let author = document.querySelector(".author");
           let active = document.querySelector(".author .active");
@@ -129,10 +137,22 @@ export default {
         item.classActive = false;
       });
     };
+
+    const changeRouter = (index) => {
+      const { $route } = proxy;
+      proxy.$router.replace({
+        path: $route.path,
+        query: {
+          id: $route.query.id,
+          index: index,
+        },
+      });
+    };
     const scrollTo = (index) => {
       let mdEle = document.querySelector(".md");
       initAuthor();
       state.authorList[index].classActive = true;
+       changeRouter(index);
       flag = false;
       mdEle.scrollTop = state.authorList[index].offsetTop - 100;
     };
