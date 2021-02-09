@@ -63,21 +63,19 @@ export default {
 </style>
 
 <style >
-::-webkit-scrollbar {
-  /*滚动条整体样式*/
+::-webkit-scrollbar{
   width: 8px; /*高宽分别对应横竖滚动条的尺寸*/
   height: 8px;
 }
-
 ::-webkit-scrollbar-thumb {
   border-radius: 5px;
   /*滚动条里面小方块*/
 
-  background: rgba(218, 255, 183, 0.322);
+  background: rgba(126, 126, 126, 0.322);
   transition: all 0.5s;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #f3ffbe;
+  background: #757575c2;
 }
 ::-webkit-scrollbar-track {
   /*滚动条里面轨道*/
