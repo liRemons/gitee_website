@@ -38,7 +38,7 @@
         v-html="item.outerHTML"
       ></div>
     </div>
-    <div class="md" v-html="html"></div>
+    <div class="md" v-html="html" @click="$utils.viewImg()"></div>
     <el-backtop target=".md"></el-backtop>
   </div>
 </template>
@@ -71,7 +71,7 @@ export default {
         }
       }
     );
-
+    // 获取当前文章
     const getFile = async () => {
       state.html = "";
       let res = await proxy.$api.HOME.getFileOption(proxy.$route.query.id);
@@ -87,7 +87,7 @@ export default {
       proxy.$utils.watchScroll(scroll, 500, MdEle); // 每隔 0.5s 输出
       getFile();
     });
-
+    // 获取标题，创建目录
     const createHeader = () => {
       let arr = [];
       list = [];
@@ -112,7 +112,7 @@ export default {
       }
       list = arr;
     };
-
+    // 监听滚动条，保存当前目录位置
     const scroll = () => {
       if (flag) {
         let MdEle = document.querySelector(".md");
@@ -132,12 +132,13 @@ export default {
       }
       flag = true;
     };
+    // 初始化目录 active
     const initAuthor = () => {
       state.authorList.forEach((item) => {
         item.classActive = false;
       });
     };
-
+    // 改变路由
     const changeRouter = (index) => {
       const { $route } = proxy;
       proxy.$router.replace({
@@ -148,14 +149,16 @@ export default {
         },
       });
     };
+    // 点击目录，控制页面位置
     const scrollTo = (index) => {
       let mdEle = document.querySelector(".md");
       initAuthor();
       state.authorList[index].classActive = true;
-       changeRouter(index);
+      changeRouter(index);
       flag = false;
       mdEle.scrollTop = state.authorList[index].offsetTop - 100;
     };
+    // 搜索功能
     const submit = () => {
       createHeader();
       if (state.title) {
