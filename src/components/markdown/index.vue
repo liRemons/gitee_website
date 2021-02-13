@@ -38,7 +38,7 @@
         v-html="item.outerHTML"
       ></div>
     </div>
-    <div class="md" v-html="html" @click="$utils.viewImg()"></div>
+    <div class="md" v-html="html" @click="handleClick"></div>
     <el-backtop target=".md"></el-backtop>
   </div>
 </template>
@@ -64,9 +64,7 @@ export default {
           list = [];
           state.authorList = [];
           if (router.query.id) {
-            proxy.$nextTick(() => {
-              getFile();
-            });
+            getFile();
           }
         }
       }
@@ -76,11 +74,14 @@ export default {
       state.html = "";
       let res = await proxy.$api.HOME.getFileOption(proxy.$route.query.id);
       state.html = res;
-      let timer = null;
-      timer && clearTimeout(timer);
-      timer = setTimeout(() => {
+      proxy.$nextTick(() => {
+        let copyCodeBox = document.createElement("div");
+        copyCodeBox.className = "copy_code";
+        document.querySelectorAll(".CodeMirror").forEach((item) => {
+          item.appendChild(copyCodeBox);
+        });
         createHeader();
-      }, 1000);
+      });
     };
     onMounted(() => {
       let MdEle = document.querySelector(".md");
@@ -170,10 +171,20 @@ export default {
         createHeader();
       }
     };
+    // 点击内容事件
+    const handleClick = (e) => {
+      if (e.target.className === "copy_code") {
+        proxy.$utils.copy(e.target.parentElement.innerText);
+        proxy.$message.success('复制成功')
+        return;
+      }
+      proxy.$utils.viewImg();
+    };
     return {
       ...toRefs(state),
       scrollTo,
       submit,
+      handleClick,
     };
   },
 };
