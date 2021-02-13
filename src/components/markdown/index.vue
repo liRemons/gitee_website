@@ -74,10 +74,11 @@ export default {
       state.html = "";
       let res = await proxy.$api.HOME.getFileOption(proxy.$route.query.id);
       state.html = res;
+
       proxy.$nextTick(() => {
-        let copyCodeBox = document.createElement("div");
-        copyCodeBox.className = "copy_code";
         document.querySelectorAll(".CodeMirror").forEach((item) => {
+          let copyCodeBox = document.createElement("div");
+          copyCodeBox.setAttribute("class", "copy_code");
           item.appendChild(copyCodeBox);
         });
         createHeader();
@@ -100,17 +101,22 @@ export default {
             innerText: item.parentNode.innerText,
             nodeName: item.parentNode.nodeName,
             offsetTop: item.parentNode.offsetTop,
+            offsetHeight:
+              item.parentNode.offsetTop + item.parentNode.clientHeight,
             classActive: false,
           });
         }
       });
 
       state.authorList = arr;
-      let menuIndex = proxy.$route.query.index;
-      if (menuIndex) {
-        scrollTo(menuIndex);
-        state.authorList[menuIndex].classActive = true;
-      }
+      proxy.$nextTick(() => {
+        let menuIndex = proxy.$route.query.index;
+        if (menuIndex) {
+          scrollTo(menuIndex);
+          scroll()
+        }
+      });
+
       list = arr;
     };
     // 监听滚动条，保存当前目录位置
@@ -118,7 +124,8 @@ export default {
       if (flag) {
         let MdEle = document.querySelector(".md");
         let scrollTop = MdEle.scrollTop || document.documentElement.scrollTop;
-        let menuIndex = list.findIndex((item) => item.offsetTop > scrollTop);
+        let menuIndex =
+          list.findIndex((item) => scrollTop + 100 < item.offsetHeight) - 1;
         initAuthor();
         if (menuIndex > 0) {
           state.authorList[menuIndex].classActive = true;
@@ -175,7 +182,7 @@ export default {
     const handleClick = (e) => {
       if (e.target.className === "copy_code") {
         proxy.$utils.copy(e.target.parentElement.innerText);
-        proxy.$message.success('复制成功')
+        proxy.$message.success("复制成功");
         return;
       }
       proxy.$utils.viewImg();
