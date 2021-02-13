@@ -113,7 +113,7 @@ export default {
         let menuIndex = proxy.$route.query.index;
         if (menuIndex) {
           scrollTo(menuIndex);
-          scroll()
+          scroll();
         }
       });
 
@@ -178,10 +178,11 @@ export default {
         createHeader();
       }
     };
+  
     // 点击内容事件
     const handleClick = (e) => {
       if (e.target.className === "copy_code") {
-        proxy.$utils.copy(e.target.parentElement.innerText);
+        proxy.$utils.copy(e.target.parentElement);
         proxy.$message.success("复制成功");
         return;
       }
