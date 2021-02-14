@@ -59,7 +59,7 @@ export default {
       contactOption: [
         { icon: "weChat", visible: false, img: "weChat" },
         { icon: "QQ", visible: false, img: "QQ" },
-        { icon: "dingTalk", visible: false, img: "ding" },
+        { icon: "GitHub", visible: false, img: "GitHub" },
       ],
       data: [
         { icon: "el-icon-message", introduce: "remons@foxmail.com" },
