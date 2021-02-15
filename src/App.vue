@@ -83,4 +83,5 @@ export default {
   border: none;
   background: transparent;
 }
+
 </style>

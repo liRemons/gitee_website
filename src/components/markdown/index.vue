@@ -97,7 +97,7 @@ export default {
       anchor.forEach((item) => {
         if (item.parentNode.nodeName !== "H2" || anchor.length == 1) {
           arr.push({
-            outerHTML: item.parentNode.outerHTML,
+            outerHTML: item.parentNode.outerHTML.replace(/<a.*?>([\s\S]*)<\/a>/, ""),
             innerText: item.parentNode.innerText,
             nodeName: item.parentNode.nodeName,
             offsetTop: item.parentNode.offsetTop,
@@ -107,7 +107,6 @@ export default {
           });
         }
       });
-
       state.authorList = arr;
       proxy.$nextTick(() => {
         let menuIndex = proxy.$route.query.index;
