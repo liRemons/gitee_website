@@ -10,7 +10,6 @@ import ElementPlus from 'element-plus';
 import { ElMessage } from 'element-plus'
 import 'normalize.css/normalize.css'
 import 'element-plus/lib/theme-chalk/index.css';
-import '@/assets/css/markdown.css'
 import Empty from '@/components/empty.vue'
 import api from '@/api'
 app.component('Empty', Empty)
