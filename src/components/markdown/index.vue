@@ -75,7 +75,7 @@ export default {
       let res = await proxy.$api.HOME.getFileOption(proxy.$route.query.id);
       state.html = res;
       proxy.$nextTick(() => {
-        document.querySelectorAll(".CodeMirror").forEach((item) => {
+        document.querySelectorAll(".md-fences").forEach((item) => {
           let copyCodeBox = document.createElement("div");
           copyCodeBox.setAttribute("class", "copy_code");
           item.appendChild(copyCodeBox);
