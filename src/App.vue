@@ -83,5 +83,8 @@ export default {
   border: none;
   background: transparent;
 }
+#write{
+  background: transparent !important;
+}
 
 </style>

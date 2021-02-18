@@ -79,6 +79,10 @@ export default {
         document.querySelectorAll(".CodeMirror").forEach((item) => {
           let copyCodeBox = document.createElement("div");
           copyCodeBox.setAttribute("class", "copy_code");
+          copyCodeBox.onclick = (e) => {
+            proxy.$utils.copy(e.target.parentElement);
+            proxy.$message.success("复制成功");
+          };
           item.appendChild(copyCodeBox);
         });
         createHeader();
@@ -97,7 +101,10 @@ export default {
       anchor.forEach((item) => {
         if (item.parentNode.nodeName !== "H2" || anchor.length == 1) {
           arr.push({
-            outerHTML: item.parentNode.outerHTML.replace(/<a.*?>([\s\S]*)<\/a>/, ""),
+            outerHTML: item.parentNode.outerHTML.replace(
+              /<a.*?>([\s\S]*)<\/a>/,
+              ""
+            ),
             innerText: item.parentNode.innerText,
             nodeName: item.parentNode.nodeName,
             offsetTop: item.parentNode.offsetTop,
@@ -177,14 +184,9 @@ export default {
         createHeader();
       }
     };
-  
+
     // 点击内容事件
     const handleClick = (e) => {
-      if (e.target.className === "copy_code") {
-        proxy.$utils.copy(e.target.parentElement);
-        proxy.$message.success("复制成功");
-        return;
-      }
       proxy.$utils.viewImg();
     };
     return {
