@@ -74,7 +74,6 @@ export default {
       state.html = "";
       let res = await proxy.$api.HOME.getFileOption(proxy.$route.query.id);
       state.html = res;
-
       proxy.$nextTick(() => {
         document.querySelectorAll(".CodeMirror").forEach((item) => {
           let copyCodeBox = document.createElement("div");
@@ -97,7 +96,10 @@ export default {
       anchor.forEach((item) => {
         if (item.parentNode.nodeName !== "H2" || anchor.length == 1) {
           arr.push({
-            outerHTML: item.parentNode.outerHTML.replace(/<a.*?>([\s\S]*)<\/a>/, ""),
+            outerHTML: item.parentNode.outerHTML.replace(
+              /<a.*?>([\s\S]*)<\/a>/,
+              ""
+            ),
             innerText: item.parentNode.innerText,
             nodeName: item.parentNode.nodeName,
             offsetTop: item.parentNode.offsetTop,
@@ -158,12 +160,17 @@ export default {
     };
     // 点击目录，控制页面位置
     const scrollTo = (index) => {
-      let mdEle = document.querySelector(".md");
       initAuthor();
       state.authorList[index].classActive = true;
       changeRouter(index);
       flag = false;
-      mdEle.scrollTop = state.authorList[index].offsetTop - 100;
+      let dom;
+      document.querySelectorAll(".md-header-anchor").forEach((item) => {
+        if (item.parentNode.innerText === state.authorList[index].innerText) {
+          dom = item;
+        }
+      });
+      dom && dom.scrollIntoView({ behavior: "smooth" });
     };
     // 搜索功能
     const submit = () => {
@@ -177,7 +184,7 @@ export default {
         createHeader();
       }
     };
-  
+
     // 点击内容事件
     const handleClick = (e) => {
       if (e.target.className === "copy_code") {
