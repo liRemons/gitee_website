@@ -47,7 +47,7 @@
               <i class="el-icon-copy-document" @click="copy"></i>
             </template>
           </el-input>
-          <span v-else>切换背景</span>
+          <span v-if="item.name === 'change_bg'">切换背景</span>
         </el-popover>
       </div>
     </div>
