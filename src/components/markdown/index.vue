@@ -75,6 +75,18 @@ export default {
       let res = await proxy.$api.HOME.getFileOption(proxy.$route.query.id);
       state.html = res;
       proxy.$nextTick(() => {
+        let a = [...document.querySelectorAll("#write a")].filter((item) =>
+          item.outerHTML.includes("#")
+        );
+        a.forEach((item) => {
+          item.onclick = (e) => {
+            let index = state.authorList.findIndex(
+              (a) => e.target.parentNode.hash.replace("#", "") === a.innerText
+            );
+            index >= 0 && scrollTo(index);
+            return false;
+          };
+        });
         document.querySelectorAll(".md-fences").forEach((item) => {
           let copyCodeBox = document.createElement("div");
           copyCodeBox.setAttribute("class", "copy_code");
@@ -129,8 +141,7 @@ export default {
       if (flag) {
         let MdEle = document.querySelector(".md");
         let scrollTop = MdEle.scrollTop || document.documentElement.scrollTop;
-        let menuIndex =
-          list.findIndex((item) => scrollTop + 100 < item.offsetHeight) - 1;
+        let menuIndex = list.findIndex((item) => scrollTop < item.offsetHeight);
         initAuthor();
         if (menuIndex > 0) {
           state.authorList[menuIndex].classActive = true;
@@ -139,8 +150,8 @@ export default {
         proxy.$nextTick(() => {
           let author = document.querySelector(".author");
           let active = document.querySelector(".author .active");
-          Number(active.offsetTop) > window.innerHeight - 150 &&
-            (author.scrollTop = Number(active.offsetTop) - 100);
+          Number(active.offsetTop) > window.innerHeight &&
+            (author.scrollTop = Number(active.offsetTop));
         });
       }
       flag = true;
