@@ -87,38 +87,12 @@ export default {
             return false;
           };
         });
-        function copy(text) {
-          if (typeof text === "object") {
-            if (document.body.createTextRange) {
-              const range = document.body.createTextRange();
-              range.moveToElementText(text);
-              range.select();
-            } else if (window.getSelection) {
-              const selection = window.getSelection();
-              const range = document.createRange();
-              range.selectNodeContents(text);
-              selection.removeAllRanges();
-              selection.addRange(range);
-            }
-            document.execCommand("Copy", "false", null);
-            window.getSelection().empty();
-          } else {
-            const input = document.createElement("input");
-            const body = document.querySelector("body");
-            input.setAttribute("value", text);
-            input.setAttribute("style", "z-index:-1");
-            body.appendChild(input);
-            input.select();
-            document.execCommand("copy");
-            body.removeChild(input);
-          }
-        }
+        
         document.querySelectorAll(".md-fences").forEach((item) => {
           let copyCodeBox = document.createElement("div");
           copyCodeBox.setAttribute("class", "copy_code");
           copyCodeBox.onclick = (e) => {
-            console.log(e.target.parentElement);
-           copy(e.target.parentElement);
+            proxy.$utils.copy(e.target.parentElement);
             proxy.$message.success("复制成功");
           };
           item.appendChild(copyCodeBox);
