@@ -98,7 +98,7 @@ export default {
     const changeBG = async (name) => {
       if(name==='change_bg'){
         let res = await axios.get(
-        "http://img.xjh.me/random_img.php?type=bg&ctype=nature"
+        "https://img.xjh.me/random_img.php?type=bg&ctype=nature"
       );
       res.data.replace(
         /<img [^>]*src=['"]([^'"]+)[^>]*>/gi,
