@@ -25,37 +25,38 @@
       </div>
     </div>
     <div class="left">
-      <el-popover
-        placement="left"
-        trigger="hover"
-        width="100"
-        :key="item.name"
-        v-for="item in iconOptions"
-      >
-        <template #reference>
-          <div class="icon">
-            <img :src="$img + item.name + '_icon.png'" alt="" />
-          </div>
-        </template>
-        <img
-          v-if="item.qr"
-          class="qr"
-          style="width: 120px"
-          :src="$img + item.qr + '.png'"
-          alt=""
-        />
-        <el-input v-else v-model="href">
-          <template #append>
-            <i class="el-icon-copy-document" @click="copy"></i>
+      <div v-for="item in iconOptions" :key="item.name">
+        <!-- <div class="icon" v-if="item.name === 'change_bg'" @click="changeBG">
+          <img :src="$img + item.name + '_icon.png'" alt="" />
+        </div> -->
+        <el-popover placement="left" trigger="hover" width="100">
+          <template #reference>
+            <div class="icon" @click="changeBG(item.name)">
+              <img :src="$img + item.name + '_icon.png'" alt="" />
+            </div>
           </template>
-        </el-input>
-      </el-popover>
+          <img
+            v-if="item.qr"
+            class="qr"
+            style="width: 120px"
+            :src="$img + item.qr + '.png'"
+            alt=""
+          />
+          <el-input v-if="!item.qr && item.name === 'share'" v-model="href">
+            <template #append>
+              <i class="el-icon-copy-document" @click="copy"></i>
+            </template>
+          </el-input>
+          <span v-else>切换背景</span>
+        </el-popover>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { reactive, toRefs, getCurrentInstance, watch } from "vue";
+import { reactive, toRefs, getCurrentInstance, watch, onMounted } from "vue";
+import axios from "axios";
 export default {
   setup() {
     const { proxy } = getCurrentInstance();
@@ -66,6 +67,7 @@ export default {
         { name: "mini", qr: "mini" },
         { name: "h5", qr: "fe_h5" },
         { name: "share", qr: "" },
+        { name: "change_bg", qr: "" },
       ],
       menu: [
         { title: "首页", id: "", path: "/" },
@@ -93,9 +95,27 @@ export default {
       proxy.$utils.copy(state.href);
       proxy.$message.success("复制成功");
     };
+    const changeBG = async (name) => {
+      if(name==='change_bg'){
+        let res = await axios.get(
+        "http://img.xjh.me/random_img.php?type=bg&ctype=nature"
+      );
+      res.data.replace(
+        /<img [^>]*src=['"]([^'"]+)[^>]*>/gi,
+        (match, capture) => {
+          if (!capture) {
+            capture = require("./assets/img/bg.jpg");
+          }
+          document.documentElement.style.setProperty("--bg", `url(${capture})`);
+        }
+      );
+      }
+      
+    };
     return {
       ...toRefs(state),
       copy,
+      changeBG,
     };
   },
 };
@@ -106,6 +126,7 @@ export default {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
   .main {
     width: 100%;
     height: calc(100% - 61px);
@@ -121,18 +142,20 @@ export default {
   .icon {
     background: #fff;
     cursor: pointer;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.32);
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     margin-top: 10px;
     text-align: center;
-    line-height: 40px;
+    line-height: 30px;
     display: flex;
     align-items: center;
     justify-content: space-around;
     img {
-      width: 30px;
+      width: 110%;
+      height: 110%;
+      max-width: 110%;
     }
   }
   .qr {
@@ -141,12 +164,10 @@ export default {
 }
 ::v-deep {
   .el-menu {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.8);
   }
-  .el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
-  .el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
-  .el-menu--horizontal > .el-submenu .el-submenu__title:hover {
-    background: rgba(255, 251, 192, 0.144);
+  .el-menu--horizontal > .el-menu-item {
+    color: #409eff;
   }
 }
 </style>

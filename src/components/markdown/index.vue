@@ -87,7 +87,7 @@ export default {
             return false;
           };
         });
-        
+
         document.querySelectorAll(".md-fences").forEach((item) => {
           let copyCodeBox = document.createElement("div");
           copyCodeBox.setAttribute("class", "copy_code");
@@ -259,13 +259,13 @@ export default {
 .author {
   width: 20%;
   overflow: auto;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.8);
 }
 .flex {
   display: flex;
   overflow: hidden;
   height: 100%;
-  background: rgba(255, 255, 255, 0.301);
+  // background: rgba(255, 255, 255, 0.301);
 }
 
 .md {

@@ -7,8 +7,9 @@
 </template>
 
 <script >
-import { getCurrentInstance } from "vue";
+import { getCurrentInstance, onMounted } from "vue";
 import Layout from "@/components/layout/index.vue";
+
 export default {
   components: {
     Layout,
@@ -18,11 +19,16 @@ export default {
     if (!proxy.$utils.IsPC()) {
       window.location.href = "https://remons.gitee.io/fe_mobile/";
     }
-    return {};
+    return {
+    };
   },
 };
 </script>
-
+<style>
+:root {
+  --bg: url("./assets/img/bg.jpg");
+}
+</style>
 <style scoped lang="less">
 .bg {
   position: absolute;
@@ -33,7 +39,7 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
-    background: rgba(255, 255, 255, 0.233);
+    // background: rgba(255, 255, 255, 0.233);
   }
 }
 
@@ -55,7 +61,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: url("./assets/img/bg.jpg");
+  background: var(--bg);
   filter: blur(5px);
   z-index: -1;
   background-size: cover;
@@ -63,7 +69,7 @@ export default {
 </style>
 
 <style >
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   width: 8px; /*高宽分别对应横竖滚动条的尺寸*/
   height: 8px;
 }
@@ -83,5 +89,4 @@ export default {
   border: none;
   background: transparent;
 }
-
 </style>
