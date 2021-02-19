@@ -167,7 +167,7 @@ export default {
     background: rgba(255, 255, 255, 0.8);
   }
   .el-menu--horizontal > .el-menu-item {
-    color: #409eff;
+    color: #222222;
   }
 }
 </style>
