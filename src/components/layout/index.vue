@@ -72,7 +72,7 @@ export default {
     const state = reactive({
       current: "/",
       href: window.location.href,
-      darkIcon: "el-icon-sunny",
+      darkIcon: "el-icon-moon",
       iconOptions: [
         { name: "mini", qr: "mini" },
         { name: "h5", qr: "fe_h5" },
