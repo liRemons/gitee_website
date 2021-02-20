@@ -135,7 +135,7 @@ export default {
       } else {
         state.darkIcon = "el-icon-sunny";
       }
-      let arr = [".bgchild", "img", ".el-popover", ".el-affix"];
+      let arr = [".bgchild", "img", ".el-popover", ".el-affix",'.md-fences'];
       if (document.querySelector(".bgchild").style.filter) {
         arr.forEach((item) => {
           darkClass(item);
