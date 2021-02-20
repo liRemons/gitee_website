@@ -20,14 +20,17 @@ export default {
     if (!proxy.$utils.IsPC()) {
       window.location.href = "https://remons.gitee.io/fe_mobile/";
     }
-    return {
-    };
+    return {};
   },
 };
 </script>
 <style>
 :root {
   --bg: url("./assets/img/bg.jpg");
+  --dark:'';
+}
+.bgchild,img,.el-popover,.el-affix,.md-fences{
+  filter: var(--dark);
 }
 </style>
 <style scoped lang="less">

@@ -124,26 +124,17 @@ export default {
         );
       }
     };
-    const darkClass = (className, flag) => {
-      document.querySelectorAll(className).forEach((item, index) => {
-        item.style.filter = flag ? "invert(100%) hue-rotate(180deg)" : "";
-      });
-    };
     const changeDark = () => {
       if (state.darkIcon === "el-icon-sunny") {
         state.darkIcon = "el-icon-moon";
+        document.documentElement.style.setProperty("--dark", "");
       } else {
+        document.documentElement.style.setProperty(
+          "--dark",
+          "invert(100%) hue-rotate(180deg)"
+        );
         state.darkIcon = "el-icon-sunny";
-      }
-      let arr = [".bgchild", "img", ".el-popover", ".el-affix",'.md-fences'];
-      if (document.querySelector(".bgchild").style.filter) {
-        arr.forEach((item) => {
-          darkClass(item);
-        });
-      } else {
-        arr.forEach((item) => {
-          darkClass(item, true);
-        });
+        
       }
     };
     return {
