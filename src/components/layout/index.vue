@@ -17,9 +17,18 @@
           }"
           >{{ item.title }}</el-menu-item
         >
+        <div class="darkAndWhite">
+          <i :class="darkIcon" @click="changeDark"></i>
+          <!-- <el-button
+            class=""
+            :icon="darkIcon"
+           
+            circle
+          ></el-button> -->
+        </div>
       </el-menu>
       <div class="main">
-        <transition>
+        <transition name="el-zoom-in-center">
           <router-view :key="$router.path"></router-view
         ></transition>
       </div>
@@ -63,6 +72,7 @@ export default {
     const state = reactive({
       current: "/",
       href: window.location.href,
+      darkIcon: "el-icon-sunny",
       iconOptions: [
         { name: "mini", qr: "mini" },
         { name: "h5", qr: "fe_h5" },
@@ -96,26 +106,51 @@ export default {
       proxy.$message.success("复制成功");
     };
     const changeBG = async (name) => {
-      if(name==='change_bg'){
+      if (name === "change_bg") {
         let res = await axios.get(
-        "https://img.xjh.me/random_img.php?type=bg&ctype=nature"
-      );
-      res.data.replace(
-        /<img [^>]*src=['"]([^'"]+)[^>]*>/gi,
-        (match, capture) => {
-          if (!capture) {
-            capture = require("./assets/img/bg.jpg");
+          "https://img.xjh.me/random_img.php?type=bg&ctype=nature"
+        );
+        res.data.replace(
+          /<img [^>]*src=['"]([^'"]+)[^>]*>/gi,
+          (match, capture) => {
+            if (!capture) {
+              capture = require("./assets/img/bg.jpg");
+            }
+            document.documentElement.style.setProperty(
+              "--bg",
+              `url(${capture})`
+            );
           }
-          document.documentElement.style.setProperty("--bg", `url(${capture})`);
-        }
-      );
+        );
       }
-      
+    };
+    const darkClass = (className, flag) => {
+      document.querySelectorAll(className).forEach((item, index) => {
+        item.style.filter = flag ? "invert(100%) hue-rotate(180deg)" : "";
+      });
+    };
+    const changeDark = () => {
+      if (state.darkIcon === "el-icon-sunny") {
+        state.darkIcon = "el-icon-moon";
+      } else {
+        state.darkIcon = "el-icon-sunny";
+      }
+      let arr = [".bgchild", "img", ".el-popover", ".el-affix"];
+      if (document.querySelector(".bgchild").style.filter) {
+        arr.forEach((item) => {
+          darkClass(item);
+        });
+      } else {
+        arr.forEach((item) => {
+          darkClass(item, true);
+        });
+      }
     };
     return {
       ...toRefs(state),
       copy,
       changeBG,
+      changeDark,
     };
   },
 };
@@ -134,6 +169,13 @@ export default {
     top: 61px;
     position: absolute;
   }
+}
+.darkAndWhite {
+  outline: none;
+  height: 60px;
+  width: 50px;
+  float: right;
+  line-height: 60px;
 }
 .left {
   position: fixed;

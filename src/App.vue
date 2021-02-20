@@ -9,12 +9,13 @@
 <script >
 import { getCurrentInstance, onMounted } from "vue";
 import Layout from "@/components/layout/index.vue";
-
+// import Darkmode from 'darkmode-js';
 export default {
   components: {
     Layout,
   },
   setup() {
+    // new Darkmode().showWidget();
     const { proxy } = getCurrentInstance();
     if (!proxy.$utils.IsPC()) {
       window.location.href = "https://remons.gitee.io/fe_mobile/";
