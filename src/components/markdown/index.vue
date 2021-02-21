@@ -147,7 +147,16 @@ export default {
       if (flag) {
         let MdEle = document.querySelector(".md");
         let scrollTop = MdEle.scrollTop || document.documentElement.scrollTop;
-        let menuIndex = list.findIndex((item) => scrollTop < item.offsetHeight);
+
+        let menuIndex = Math.max(
+          ...list
+            .map((item, index) => {
+              if (scrollTop >= item.offsetTop) {
+                return index;
+              }
+            })
+            .filter((item) => item !== undefined)
+        );
         initAuthor();
         if (menuIndex > 0) {
           state.authorList[menuIndex].classActive = true;
