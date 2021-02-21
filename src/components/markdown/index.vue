@@ -6,37 +6,36 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(255,255, 255, 0.4)"
   >
-    <div
-      class="author"
-      v-loading="!authorList.length"
-      element-loading-text="加载目录中..."
-      element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(255,255, 255, 0.2)"
-    >
-      <el-affix :offset="60" v-if="authorList.length">
-        <el-input
-          size="mini"
-          @change="submit"
-          v-model="title"
-          placeholder="请输入标题"
-        >
-          <template #append>
-            <el-button
-              @click="submit"
-              icon="el-icon-search"
-            ></el-button> </template
-        ></el-input>
-      </el-affix>
-
+    <div class="box">
+      <el-input
+        size="mini"
+        @change="submit"
+        v-model="title"
+        placeholder="请输入标题"
+      >
+        <template #append>
+          <el-button
+            @click="submit"
+            icon="el-icon-search"
+          ></el-button> </template
+      ></el-input>
       <div
-        :class="{
-          active: item.classActive,
-        }"
-        :key="item.outerHTML"
-        @click="scrollTo(index)"
-        v-for="(item, index) in authorList"
-        v-html="item.outerHTML"
-      ></div>
+        class="author"
+        v-loading="!authorList.length"
+        element-loading-text="加载目录中..."
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(255,255, 255, 0.2)"
+      >
+        <div
+          :class="{
+            active: item.classActive,
+          }"
+          :key="item.outerHTML"
+          @click="scrollTo(index)"
+          v-for="(item, index) in authorList"
+          v-html="item.outerHTML"
+        ></div>
+      </div>
     </div>
     <div class="md" v-html="html" @click="handleClick"></div>
     <el-backtop target=".md"></el-backtop>
@@ -75,6 +74,7 @@ export default {
       let res = await proxy.$api.HOME.getFileOption(proxy.$route.query.id);
       state.html = res;
       proxy.$nextTick(() => {
+        // 去除锚点事件，自定义事件替代锚点跳转   ====START
         let a = [...document.querySelectorAll("#write a")].filter((item) =>
           item.outerHTML.includes("#")
         );
@@ -87,12 +87,12 @@ export default {
                   ""
                 ) === a.innerText
             );
-            console.log(e, "index");
             index >= 0 && scrollTo(index);
             return false;
           };
         });
-
+        // ==================END
+        // 给代码块添加复制类名
         document.querySelectorAll(".md-fences").forEach((item) => {
           let copyCodeBox = document.createElement("div");
           copyCodeBox.setAttribute("class", "copy_code");
@@ -103,6 +103,10 @@ export default {
           item.appendChild(copyCodeBox);
         });
         createHeader();
+        // 初始跳转
+        if (proxy.$route.query.index) {
+          scrollTo(proxy.$route.query.index);
+        }
       });
     };
     onMounted(() => {
@@ -132,14 +136,6 @@ export default {
         }
       });
       state.authorList = arr;
-      proxy.$nextTick(() => {
-        let menuIndex = proxy.$route.query.index;
-        if (menuIndex) {
-          scrollTo(menuIndex);
-          scroll();
-        }
-      });
-
       list = arr;
     };
     // 监听滚动条，保存当前目录位置
@@ -147,7 +143,6 @@ export default {
       if (flag) {
         let MdEle = document.querySelector(".md");
         let scrollTop = MdEle.scrollTop || document.documentElement.scrollTop;
-
         let menuIndex = Math.max(
           ...list
             .map((item, index) => {
@@ -158,18 +153,14 @@ export default {
             .filter((item) => item !== undefined)
         );
         initAuthor();
-        if (menuIndex > 0) {
+        if (menuIndex >= 0) {
           state.authorList[menuIndex].classActive = true;
           changeRouter(menuIndex);
         }
-        proxy.$nextTick(() => {
-          let author = document.querySelector(".author");
-          let active = document.querySelector(".author .active");
-          Number(active.offsetTop) > window.innerHeight &&
-            (author.scrollTop = Number(active.offsetTop));
-        });
       }
       flag = true;
+      let dom = document.querySelector(".active");
+      dom && dom.scrollIntoView({ behavior: "smooth" });
     };
     // 初始化目录 active
     const initAuthor = () => {
@@ -210,9 +201,7 @@ export default {
           item.innerText.includes(state.title)
         );
       }
-      if (state.authorList.length == 0) {
-        createHeader();
-      }
+      state.authorList.length == 0 && createHeader();
     };
 
     // 点击内容事件
@@ -270,9 +259,17 @@ export default {
 }
 </style>
 <style scoped lang="less">
-.author {
+.box {
   width: 20%;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.author {
+  width: 100%;
   overflow: auto;
+  height: 100%;
   background: rgba(255, 255, 255, 0.8);
 }
 .flex {

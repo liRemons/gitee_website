@@ -7,7 +7,7 @@
 </template>
 
 <script >
-import { getCurrentInstance, onMounted } from "vue";
+import { getCurrentInstance, watch, onMounted } from "vue";
 import Layout from "@/components/layout/index.vue";
 // import Darkmode from 'darkmode-js';
 export default {
@@ -15,11 +15,29 @@ export default {
     Layout,
   },
   setup() {
-    // new Darkmode().showWidget();
     const { proxy } = getCurrentInstance();
-    if (!proxy.$utils.IsPC()) {
-      window.location.href = "https://remons.gitee.io/fe_mobile/";
-    }
+    onMounted(() => {
+      target();
+    });
+
+    const target = () => {
+      setTimeout(() => {
+        if (!proxy.$utils.IsPC()) {
+          const {
+            path,
+            query: { id, index },
+          } = proxy.$route;
+          let url = "https://remons.gitee.io/fe_mobile/#";
+          if (id) {
+            window.location.href =
+              url + `${path}?id=${id}${index ? "&index=" + index : ""}`;
+          } else {
+            window.location.href = url + "/";
+          }
+        }
+      }, 1000);
+    };
+
     return {};
   },
 };
@@ -27,9 +45,13 @@ export default {
 <style>
 :root {
   --bg: url("./assets/img/bg.jpg");
-  --dark:'';
+  --dark: "";
 }
-.bgchild,img,.el-popover,.el-affix,.md-fences{
+.bgchild,
+img,
+.el-popover,
+.el-affix,
+.md-fences {
   filter: var(--dark);
 }
 </style>
