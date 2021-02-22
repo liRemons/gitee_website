@@ -31,7 +31,7 @@
             active: item.classActive,
           }"
           :key="item.outerHTML"
-          @click="scrollTo(index)"
+          @click="scrollTo(item.index, index)"
           v-for="(item, index) in authorList"
           v-html="item.outerHTML"
         ></div>
@@ -119,19 +119,16 @@ export default {
       let arr = [];
       list = [];
       let anchor = document.querySelectorAll(".md .md-header-anchor");
-      anchor.forEach((item) => {
+      anchor.forEach((item, index) => {
         if (item.parentNode.nodeName !== "H2" || anchor.length == 1) {
+          const { innerText, nodeName, offsetTop, outerHTML } = item.parentNode;
           arr.push({
-            outerHTML: item.parentNode.outerHTML.replace(
-              /<a.*?>([\s\S]*)<\/a>/,
-              ""
-            ),
-            innerText: item.parentNode.innerText,
-            nodeName: item.parentNode.nodeName,
-            offsetTop: item.parentNode.offsetTop,
-            offsetHeight:
-              item.parentNode.offsetTop + item.parentNode.clientHeight,
+            outerHTML: outerHTML.replace(/<a.*?>([\s\S]*)<\/a>/, ""),
+            innerText,
+            nodeName,
+            offsetTop,
             classActive: false,
+            index,
           });
         }
       });
@@ -180,14 +177,23 @@ export default {
       });
     };
     // 点击目录，控制页面位置
-    const scrollTo = (index) => {
+    const scrollTo = (index, activeIndex) => {
       initAuthor();
-      state.authorList[index].classActive = true;
+      let authorText;
+      if (state.authorList[index]) {
+        state.authorList[index].classActive = true;
+        authorText = state.authorList[index].innerText;
+      } else {
+        state.authorList[activeIndex].classActive = true;
+        authorText = state.authorList[activeIndex].innerText;
+      }
+      console.log(authorText.toLowerCase(), "ddd");
+
       changeRouter(index);
       flag = false;
       let dom;
       document.querySelectorAll(".md-header-anchor").forEach((item) => {
-        if (item.parentNode.innerText === state.authorList[index].innerText) {
+        if (item.parentNode.innerText === authorText) {
           dom = item;
         }
       });
@@ -198,7 +204,7 @@ export default {
       createHeader();
       if (state.title) {
         state.authorList = state.authorList.filter((item) =>
-          item.innerText.includes(state.title)
+          item.innerText.toLowerCase().includes(state.title.toLowerCase())
         );
       }
       state.authorList.length == 0 && createHeader();
