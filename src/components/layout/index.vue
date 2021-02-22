@@ -57,6 +57,7 @@
 <script>
 import { reactive, toRefs, getCurrentInstance, watch, onMounted } from "vue";
 import XLSX from "xlsx";
+import axios from 'axios'
 export default {
   setup() {
     const { proxy } = getCurrentInstance();
