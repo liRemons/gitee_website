@@ -1,18 +1,6 @@
 <template>
-  <div
-    class="flex"
-    v-loading="!html"
-    element-loading-text="加载页面中..."
-    element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(255,255, 255, 0.4)"
-  >
-    <div
-      class="author"
-      v-loading="!authorList.length"
-      element-loading-text="加载目录中..."
-      element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(255,255, 255, 0.2)"
-    >
+  <div class="flex">
+    <div class="author">
       <el-button
         icon="el-icon-search"
         size="mini"
@@ -262,13 +250,11 @@ export default {
 .author {
   width: 20%;
   overflow: auto;
-  height: 100%;
   background: rgba(255, 255, 255, 0.8);
-  position: relative;
   .search {
     position: fixed;
     z-index: 10;
-    left:calc(20% - 40px);
+    left: calc(20% - 40px);
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
     top: 65px;
   }
@@ -277,7 +263,6 @@ export default {
   display: flex;
   overflow: hidden;
   height: 100%;
-  // background: rgba(255, 255, 255, 0.301);
 }
 
 .md {
