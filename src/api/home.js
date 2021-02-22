@@ -7,6 +7,13 @@ const HOME = {
       method: "get"
     });
   },
+  getMenuOption(name) {
+    return service({
+      url: `/summarize/website/data/${name}.xlsx`,
+      method: "get",
+      responseType: 'arraybuffer',
+    });
+  }
 
 
 }

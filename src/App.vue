@@ -42,19 +42,6 @@ export default {
   },
 };
 </script>
-<style>
-:root {
-  --bg: url("./assets/img/bg.jpg");
-  --dark: "";
-}
-.bgchild,
-img,
-.el-popover,
-.el-affix,
-.md-fences {
-  filter: var(--dark);
-}
-</style>
 <style scoped lang="less">
 .bg {
   position: absolute;
@@ -95,6 +82,20 @@ img,
 </style>
 
 <style >
+html .el-loading-parent--relative {
+  position: inherit !important;
+}
+:root {
+  --bg: url("./assets/img/bg.jpg");
+  --dark: "";
+}
+.bgchild,
+img,
+.el-popover,
+.el-affix,
+.md-fences {
+  filter: var(--dark);
+}
 ::-webkit-scrollbar {
   width: 8px; /*高宽分别对应横竖滚动条的尺寸*/
   height: 8px;

@@ -19,12 +19,6 @@
         >
         <div class="darkAndWhite">
           <i :class="darkIcon" @click="changeDark"></i>
-          <!-- <el-button
-            class=""
-            :icon="darkIcon"
-           
-            circle
-          ></el-button> -->
         </div>
       </el-menu>
       <div class="main">
@@ -35,9 +29,6 @@
     </div>
     <div class="left">
       <div v-for="item in iconOptions" :key="item.name">
-        <!-- <div class="icon" v-if="item.name === 'change_bg'" @click="changeBG">
-          <img :src="$img + item.name + '_icon.png'" alt="" />
-        </div> -->
         <el-popover placement="left" trigger="hover" width="100">
           <template #reference>
             <div class="icon" @click="changeBG(item.name)">
@@ -65,7 +56,7 @@
 
 <script>
 import { reactive, toRefs, getCurrentInstance, watch, onMounted } from "vue";
-import axios from "axios";
+import XLSX from "xlsx";
 export default {
   setup() {
     const { proxy } = getCurrentInstance();
@@ -79,19 +70,7 @@ export default {
         { name: "share", qr: "" },
         { name: "change_bg", qr: "" },
       ],
-      menu: [
-        { title: "首页", id: "", path: "/" },
-        { title: "html/css", id: "HTML_CSS", path: "/markdown" },
-        { title: "JS", id: "JS", path: "/markdown" },
-        { title: "Vue", id: "Vue", path: "/markdown" },
-        { title: "React", id: "React", path: "/markdown" },
-        { title: "TypeScript", id: "TypeScript", path: "/markdown" },
-        { title: "Node", id: "Node", path: "/markdown" },
-        { title: "Electron", id: "Electron", path: "/markdown" },
-        { title: "Webpack", id: "Webpack", path: "/markdown" },
-        { title: "Vite", id: "Vite", path: "/markdown" },
-        { title: "其它", id: "other", path: "/markdown" },
-      ],
+      menu: [],
     });
 
     watch(
@@ -101,10 +80,32 @@ export default {
         state.current = $route.query.id;
       }
     );
+
+    onMounted(() => {
+      getMenuOption();
+    });
+
     const copy = () => {
       proxy.$utils.copy(state.href);
       proxy.$message.success("复制成功");
     };
+    // 获取菜单
+    const getMenuOption = async () => {
+      let res = await proxy.$api.HOME.getMenuOption("menu");
+      let persons = [];
+      var workbook = XLSX.read(res, { type: "buffer" });
+      for (var sheet in workbook.Sheets) {
+        if (workbook.Sheets.hasOwnProperty(sheet)) {
+          persons = persons.concat(
+            XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
+          );
+          break;
+        }
+      }
+      const home = { title: "首页", id: "", path: "/" };
+      state.menu = [home, ...persons];
+    };
+    // 改变背景图
     const changeBG = async (name) => {
       if (name === "change_bg") {
         let res = await axios.get(
@@ -134,7 +135,6 @@ export default {
           "invert(100%) hue-rotate(180deg)"
         );
         state.darkIcon = "el-icon-sunny";
-        
       }
     };
     return {
