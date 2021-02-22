@@ -6,36 +6,29 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(255,255, 255, 0.4)"
   >
-    <div class="box">
-      <el-input
+    <div
+      class="author"
+      v-loading="!authorList.length"
+      element-loading-text="加载目录中..."
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(255,255, 255, 0.2)"
+    >
+      <el-button
+        icon="el-icon-search"
         size="mini"
-        @change="submit"
-        v-model="title"
-        placeholder="请输入标题"
-      >
-        <template #append>
-          <el-button
-            @click="submit"
-            icon="el-icon-search"
-          ></el-button> </template
-      ></el-input>
+        class="search"
+        circle
+        @click="submit"
+      ></el-button>
       <div
-        class="author"
-        v-loading="!authorList.length"
-        element-loading-text="加载目录中..."
-        element-loading-spinner="el-icon-loading"
-        element-loading-background="rgba(255,255, 255, 0.2)"
-      >
-        <div
-          :class="{
-            active: item.classActive,
-          }"
-          :key="item.outerHTML"
-          @click="scrollTo(item.index, index)"
-          v-for="(item, index) in authorList"
-          v-html="item.outerHTML"
-        ></div>
-      </div>
+        :class="{
+          active: item.classActive,
+        }"
+        :key="item.outerHTML"
+        @click="scrollTo(item.index, index)"
+        v-for="(item, index) in authorList"
+        v-html="item.outerHTML"
+      ></div>
     </div>
     <div class="md" v-html="html" @click="handleClick"></div>
     <el-backtop target=".md"></el-backtop>
@@ -52,14 +45,12 @@ export default {
     const state = reactive({
       html: "",
       authorList: [],
-      title: "",
     });
 
     watch(
       () => proxy.$route,
       (router, prev) => {
         if (router.path + router.query.id !== prev.path + prev.query.id) {
-          state.title = "";
           list = [];
           state.authorList = [];
           if (router.query.id) {
@@ -156,8 +147,10 @@ export default {
         }
       }
       flag = true;
-      let dom = document.querySelector(".active");
-      dom && dom.scrollIntoView({ behavior: "smooth" });
+      proxy.$nextTick(() => {
+        let dom = document.querySelector(".active");
+        dom && dom.scrollIntoView({ behavior: "smooth" });
+      });
     };
     // 初始化目录 active
     const initAuthor = () => {
@@ -187,7 +180,6 @@ export default {
         state.authorList[activeIndex].classActive = true;
         authorText = state.authorList[activeIndex].innerText;
       }
-      console.log(authorText.toLowerCase(), "ddd");
 
       changeRouter(index);
       flag = false;
@@ -201,13 +193,15 @@ export default {
     };
     // 搜索功能
     const submit = () => {
+      proxy.$prompt("请输入标题", "提示", {}).then(({ value }) => {
+        if (value) {
+          state.authorList = state.authorList.filter((item) =>
+            item.innerText.toLowerCase().includes(value.toLowerCase())
+          );
+        }
+        state.authorList.length == 0 && createHeader();
+      });
       createHeader();
-      if (state.title) {
-        state.authorList = state.authorList.filter((item) =>
-          item.innerText.toLowerCase().includes(state.title.toLowerCase())
-        );
-      }
-      state.authorList.length == 0 && createHeader();
     };
 
     // 点击内容事件
@@ -265,18 +259,19 @@ export default {
 }
 </style>
 <style scoped lang="less">
-.box {
-  width: 20%;
-  overflow: hidden;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
 .author {
-  width: 100%;
+  width: 20%;
   overflow: auto;
   height: 100%;
   background: rgba(255, 255, 255, 0.8);
+  position: relative;
+  .search {
+    position: fixed;
+    z-index: 10;
+    left:calc(20% - 40px);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+    top: 65px;
+  }
 }
 .flex {
   display: flex;
