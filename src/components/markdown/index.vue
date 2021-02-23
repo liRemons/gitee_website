@@ -21,7 +21,7 @@
         <el-empty :image-size="200" description="暂无数据"></el-empty>
       </div>
     </div>
-    <div class="md" v-html="html" v-show="html"  @click="handleClick"></div>
+    <div class="md" v-html="html" v-show="html" @click="handleClick"></div>
     <div
       v-show="!html"
       class="tc"
@@ -178,15 +178,11 @@ export default {
         state.authorList[activeIndex].classActive = true;
         authorText = state.authorList[activeIndex].innerText;
       }
-
       changeRouter(index);
       flag = false;
-      let dom;
-      document.querySelectorAll(".md-header-anchor").forEach((item) => {
-        if (item.parentNode.innerText === authorText) {
-          dom = item;
-        }
-      });
+      let dom = [...document.querySelectorAll(".md-header-anchor")].filter(
+        (item) => item.parentNode.innerText === authorText && item
+      )?.[0];
       dom && dom.scrollIntoView({ behavior: "smooth" });
     };
     // 搜索功能

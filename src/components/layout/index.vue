@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="layout_flex">
+      <!-- 头部 -->
       <header>
         <el-select
           v-model="routerPath"
@@ -28,13 +29,14 @@
           </div>
         </div>
       </header>
-
+      <!-- 路由展示区 -->
       <div class="main">
         <transition name="el-zoom-in-center">
           <router-view :menu="menu" :key="$router.path"></router-view
         ></transition>
       </div>
     </div>
+    <!-- 左侧菜单 -->
     <div class="left">
       <div v-for="item in iconOptions" :key="item.name">
         <el-popover placement="left" trigger="hover" width="100">
@@ -95,11 +97,12 @@ export default {
     onMounted(() => {
       getMenuOption();
     });
-
+    //
     const copy = () => {
       proxy.$utils.copy(state.href);
       proxy.$message.success("复制成功");
     };
+    // 重置
     const initRouter = () => {
       const {
         path,
@@ -108,7 +111,7 @@ export default {
       if (id) {
         state.routerPath = path + "&" + id;
       } else {
-        state.routerPath = home.path + "&" + home.id;
+        state.routerPath = "/&home";
       }
     };
 
@@ -125,13 +128,15 @@ export default {
           break;
         }
       }
+      // 首页
       const home = { title: "首页", id: "home", path: "/", flag: true };
+      // 我的
+      const my = { title: "我", id: "my", path: "/my", flag: true };
+      state.menu = [home, ...persons, my];
+      //首次进入，重置路由
       setTimeout(() => {
         initRouter();
       }, 500);
-
-      const my = { title: "我", id: "my", path: "/my", flag: true };
-      state.menu = [home, ...persons, my];
     };
     // 改变背景图
     const changeBG = async (name) => {
@@ -153,6 +158,7 @@ export default {
         );
       }
     };
+    // 暗黑模式
     const changeDark = () => {
       if (state.darkIcon === "el-icon-sunny") {
         state.darkIcon = "el-icon-moon";
@@ -165,7 +171,7 @@ export default {
         state.darkIcon = "el-icon-sunny";
       }
     };
-
+    // 切换页面
     const changeRouter = () => {
       if (state.routerPath) {
         proxy.$router.replace({
