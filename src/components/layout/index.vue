@@ -23,7 +23,7 @@
       </el-menu>
       <div class="main">
         <transition name="el-zoom-in-center">
-          <router-view :key="$router.path"></router-view
+          <router-view :menu="menu" :key="$router.path"></router-view
         ></transition>
       </div>
     </div>
@@ -57,7 +57,7 @@
 <script>
 import { reactive, toRefs, getCurrentInstance, watch, onMounted } from "vue";
 import XLSX from "xlsx";
-import axios from 'axios'
+import axios from "axios";
 export default {
   setup() {
     const { proxy } = getCurrentInstance();
@@ -103,8 +103,9 @@ export default {
           break;
         }
       }
-      const home = { title: "首页", id: "", path: "/" };
-      state.menu = [home, ...persons];
+      const home = { title: "首页", id: "home", path: "/", flag: true };
+      const my = { title: "我", id: "my", path: "/my", flag: true };
+      state.menu = [home, ...persons, my];
     };
     // 改变背景图
     const changeBG = async (name) => {
@@ -202,6 +203,11 @@ export default {
   }
   .el-menu--horizontal > .el-menu-item {
     color: #222222;
+  }
+  .el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
+  .el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
+  .el-menu--horizontal > .el-submenu .el-submenu__title:hover {
+    background-color: rgba(90, 195, 255, 0.108);
   }
 }
 </style>

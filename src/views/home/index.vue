@@ -1,137 +1,97 @@
 <template>
-  <div class="home">
-    <el-card class="box-card">
-      <div class="card_body">
-        <el-avatar :src="$img + 'avatar.jpg'" :size="80" />
-        <div style="padding-left: 20px">
-          <div class="name">李润泉</div>
-          <div class="introduce">前端开发工程师</div>
-        </div>
+  <div>
+    <div class="flex">
+      <div
+        class="card"
+        v-for="item in menu.filter((el) => !el.flag)"
+        :key="item.id"
+        @click="toRouter(item)"
+      >
+        <el-card shadow="hover" class="tc" :body-style="{ padding: '0px' }">
+          <img :src="$url + item.imgUrl" class="image" /><br />
+          <span class="title">{{ item.title }}</span>
+        </el-card>
       </div>
-      <div class="list">
-        <p v-for="item in data" :key="item.introduce">
-          <i :class="item.icon"></i>
-          {{ item.introduce }}
-        </p>
-      </div>
-      <div class="foot">
-        <el-popover
-          width="200"
-          class="foot_popover"
-          placement="right"
-          trigger="hover"
-          v-for="item in contactOption"
-          :key="item.icon"
-        >
-          <template #reference>
-            <img class="icon" :src="$img + item.icon + '.png'" alt="" />
-          </template>
-          <img style="width: 200px" :src="$img + item.img + 'QR.png'" alt="" />
-        </el-popover>
-      </div>
-    </el-card>
+    </div>
   </div>
 </template>
 
 <script>
-import { reactive, toRefs } from "vue";
-
+import { useRouter } from "vue-router";
 export default {
+  props: {
+    menu: Array,
+  },
   setup() {
-    const initialTime = new Date("2018-03-12").getTime();
-    const nowTime = new Date().getTime();
-    const count = (
-      (nowTime - initialTime) /
-      1000 /
-      60 /
-      60 /
-      24 /
-      30 /
-      12
-    ).toFixed(2);
-    let year = parseInt(count),month = 0;
-    if (Math.ceil(count.split(".")[1] * 0.12) === 12) {
-      year += 1;
-    } else {
-      month = Math.ceil(count.split(".")[1] * 0.12);
-    }
-    const state = reactive({
-      contactOption: [
-        { icon: "weChat", visible: false, img: "weChat" },
-        { icon: "QQ", visible: false, img: "QQ" },
-        { icon: "GitHub", visible: false, img: "GitHub" },
-      ],
-      data: [
-        { icon: "el-icon-message", introduce: "remons@foxmail.com" },
-        { icon: "el-icon-phone-outline", introduce: "15563043705" },
-        {
-          icon: "el-icon-timer",
-          introduce: `码龄：${year} 年 ${month ?' 个月':''} `,
+    const router = useRouter();
+    const toRouter = (data) => {
+      const { id, path } = data;
+      router.replace({
+        path,
+        query: {
+          id,
         },
-        { icon: "el-icon-place", introduce: "工作地：浙江 杭州" },
-        { icon: "el-icon-house", introduce: "故乡：山东 菏泽" },
-      ],
-    });
-    return {
-      ...toRefs(state),
+      });
     };
+    return { toRouter };
   },
 };
 </script>
 
-<style scoped lang="less">
-.home {
-  width: 100%;
-  margin-top: 50px;
+<style lang="less" scoped>
+.flex {
   display: flex;
-  justify-content: space-around;
-  .card_body {
-    padding: 0 30px;
-    display: flex;
-    align-items: center;
-    .name {
-      color: #000;
-      margin-bottom: 5px;
-      font-size: 18px;
-      font-weight: bold;
-    }
-    .introduce {
-      color: #ccc;
-      font-size: 14px;
-    }
-  }
-  .list {
-    padding: 0 30px;
-  }
-  .foot {
-    width: 280px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    background: #fafafa;
-  }
-  .icon {
-    height: 22px;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  width: 1300px;
+  margin: 50px auto;
+  .card {
+    width: 180px;
+    margin:  18px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    background: rgba(226, 247, 255, 0.507);
+    color: #fff;
+    border-radius: 5px;
     cursor: pointer;
+    img {
+      width: 70%;
+      margin: 10px 0;
+    }
+    .title {
+      display: inline-block;
+      margin: 10px 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: #000;
+    }
   }
 }
-::v-deep {
-  .el-card__body {
-    padding: 0;
-    padding-top: 20px;
-  }
-  .el-card {
-    border-radius: 0;
-  }
-}
-</style>
 
-<style >
-/* .foot_popover {
-  width: inherit !important;
-} */
-/* .el-popover.el-popper img{
-  max-width: 100px;
-} */
+::v-deep {
+  .el-card {
+    background: transparent;
+
+    border: none;
+    .el-card__body {
+      text-align: center;
+    }
+  }
+  .el-card.is-always-shadow,
+  .el-card.is-hover-shadow:focus,
+  .el-card.is-hover-shadow:hover {
+    box-shadow: 0 0 10px 6px rgba(41, 41, 41, 0.171);
+    transition: all 0.5s;
+  }
+}
+
+// @media screen and (max-width: 1400px) {
+//   .flex {
+//     max-width: 1300px;
+//     .card {
+//       width: 200px;
+//       margin: 10px 15px;
+//     }
+//   }
+// }
 </style>

@@ -4,15 +4,16 @@ const routes = [
     path: "/",
     name: "Home",
     component: () => import("@/views/home/index.vue"),
-    meta: {
-      title: "个人介绍",
-      icon: "UserOutlined",
-    },
   },
   {
     path: "/markdown",
     name: "markdown",
     component: () => import("@/components/markdown/index.vue"),
+  },
+  {
+    path: "/my",
+    name: "my",
+    component: () => import("@/views/my/index.vue"),
   },
 ];
 
