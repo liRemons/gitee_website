@@ -7,7 +7,7 @@
         :key="item.id"
         @click="toRouter(item)"
       >
-        <el-card shadow="hover" class="tc" :body-style="{ padding: '0px' }">
+        <el-card shadow="never" class="tc" :body-style="{ padding: '0px' }">
           <img :src="$url + item.imgUrl" class="image" /><br />
           <span class="title">{{ item.title }}</span>
         </el-card>
@@ -47,12 +47,16 @@ export default {
   margin: 50px auto;
   .card {
     width: 180px;
-    margin:  18px;
+    margin: 18px;
     flex-grow: 0;
     flex-shrink: 0;
     background: rgba(226, 247, 255, 0.507);
     color: #fff;
     border-radius: 5px;
+    &:hover {
+      box-shadow: 0 0 10px 6px rgba(41, 41, 41, 0.171);
+      transition: all 0.5s;
+    }
     cursor: pointer;
     img {
       width: 70%;
@@ -76,12 +80,6 @@ export default {
     .el-card__body {
       text-align: center;
     }
-  }
-  .el-card.is-always-shadow,
-  .el-card.is-hover-shadow:focus,
-  .el-card.is-hover-shadow:hover {
-    box-shadow: 0 0 10px 6px rgba(41, 41, 41, 0.171);
-    transition: all 0.5s;
   }
 }
 
