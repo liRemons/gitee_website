@@ -17,8 +17,18 @@
         v-for="(item, index) in authorList"
         v-html="item.outerHTML"
       ></div>
+      <div v-if="authorList.length == 0" class="tc" style="width: 100%">
+        <el-empty :image-size="200" description="暂无数据"></el-empty>
+      </div>
     </div>
-    <div class="md" v-html="html" @click="handleClick"></div>
+    <div class="md" v-html="html" v-show="html"  @click="handleClick"></div>
+    <div
+      v-show="!html"
+      class="tc"
+      style="width: 100%; background: rgba(255, 255, 255, 0.5); margin: 0 20px"
+    >
+      <el-empty :image-size="200" description="暂无数据"></el-empty>
+    </div>
     <el-backtop target=".md"></el-backtop>
   </div>
 </template>

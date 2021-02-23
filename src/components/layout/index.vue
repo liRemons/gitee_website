@@ -1,26 +1,34 @@
 <template>
   <div>
     <div class="layout_flex">
-      <el-menu
-        :default-active="current"
-        class="el-menu-demo"
-        mode="horizontal"
-        router
-      >
-        <el-menu-item
-          :index="item.id"
-          v-for="item in menu"
-          :key="item.path"
-          :route="{
-            path: item.path,
-            query: { id: item.id },
-          }"
-          >{{ item.title }}</el-menu-item
+      <header>
+        <el-select
+          v-model="routerPath"
+          @change="changeRouter"
+          placeholder="请选择"
         >
-        <div class="darkAndWhite">
-          <i :class="darkIcon" @click="changeDark"></i>
+          <el-option
+            v-for="item in menu"
+            :key="item.id"
+            :label="item.title"
+            :value="item.path + '&' + item.id"
+          >
+            <div class="select_option">
+              <span style="float: left">{{ item.title }}</span>
+              <img v-if="item.imgUrl" :src="$url + item.imgUrl" class="image" />
+            </div>
+          </el-option>
+        </el-select>
+        <div class="handle">
+          <div class="icon" @click="$router.replace('/my?id=my')">
+            <img class="avatar" :src="$img + 'avatar.jpg'" alt="" />
+          </div>
+          <div class="icon">
+            <i :class="darkIcon" @click="changeDark"></i>
+          </div>
         </div>
-      </el-menu>
+      </header>
+
       <div class="main">
         <transition name="el-zoom-in-center">
           <router-view :menu="menu" :key="$router.path"></router-view
@@ -72,6 +80,7 @@ export default {
         { name: "change_bg", qr: "" },
       ],
       menu: [],
+      routerPath: "",
     });
 
     watch(
@@ -79,6 +88,7 @@ export default {
       ($route, prev) => {
         state.href = window.location.href;
         state.current = $route.query.id;
+        initRouter();
       }
     );
 
@@ -90,6 +100,18 @@ export default {
       proxy.$utils.copy(state.href);
       proxy.$message.success("复制成功");
     };
+    const initRouter = () => {
+      const {
+        path,
+        query: { id },
+      } = proxy.$route;
+      if (id) {
+        state.routerPath = path + "&" + id;
+      } else {
+        state.routerPath = home.path + "&" + home.id;
+      }
+    };
+
     // 获取菜单
     const getMenuOption = async () => {
       let res = await proxy.$api.HOME.getMenuOption("menu");
@@ -104,6 +126,10 @@ export default {
         }
       }
       const home = { title: "首页", id: "home", path: "/", flag: true };
+      setTimeout(() => {
+        initRouter();
+      }, 500);
+
       const my = { title: "我", id: "my", path: "/my", flag: true };
       state.menu = [home, ...persons, my];
     };
@@ -139,17 +165,63 @@ export default {
         state.darkIcon = "el-icon-sunny";
       }
     };
+
+    const changeRouter = () => {
+      if (state.routerPath) {
+        proxy.$router.replace({
+          path: state.routerPath.split("&")[0],
+          query: {
+            id: state.routerPath.split("&")[1],
+          },
+        });
+      }
+    };
     return {
       ...toRefs(state),
       copy,
       changeBG,
       changeDark,
+      changeRouter,
     };
   },
 };
 </script>
 
 <style scoped lang="less">
+header {
+  width: 100%;
+  height: 61px;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 4px 8px #3333334d;
+  position: absolute;
+  padding: 0 10px;
+  z-index: 10;
+  justify-content: space-between;
+  .handle {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+  }
+  .avatar {
+    border-radius: 50%;
+  }
+  .icon {
+    cursor: pointer;
+    margin: 0 10px;
+    text-align: center;
+    outline: none;
+    width: 30px;
+    line-height: 30px;
+    height: 30px;
+  }
+}
+.select_option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .layout_flex {
   display: flex;
   flex-direction: column;
@@ -163,12 +235,12 @@ export default {
     position: absolute;
   }
 }
-.darkAndWhite {
-  outline: none;
-  height: 60px;
-  width: 50px;
+
+.image {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
   float: right;
-  line-height: 60px;
 }
 .left {
   position: fixed;
@@ -198,16 +270,19 @@ export default {
   }
 }
 ::v-deep {
-  .el-menu {
-    background: rgba(255, 255, 255, 0.8);
+  .el-input__inner {
+    background-color: transparent;
   }
-  .el-menu--horizontal > .el-menu-item {
-    color: #222222;
-  }
-  .el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
-  .el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
-  .el-menu--horizontal > .el-submenu .el-submenu__title:hover {
-    background-color: rgba(90, 195, 255, 0.108);
-  }
+  //   .el-menu {
+  //     background: rgba(255, 255, 255, 0.8);
+  //   }
+  //   .el-menu--horizontal > .el-menu-item {
+  //     color: #222222;
+  //   }
+  //   .el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
+  //   .el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
+  //   .el-menu--horizontal > .el-submenu .el-submenu__title:hover {
+  //     background-color: rgba(90, 195, 255, 0.108);
+  //   }
 }
 </style>
