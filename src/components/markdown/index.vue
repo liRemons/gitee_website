@@ -104,7 +104,7 @@ export default {
     };
     onMounted(() => {
       let MdEle = document.querySelector(".md");
-      proxy.$utils.watchScroll(scroll, 500, MdEle); // 每隔 0.5s 输出
+      proxy.$utils.watchScroll(scroll, 300, MdEle); // 每隔 0.5s 输出
       getFile();
     });
     // 获取标题，创建目录
@@ -260,6 +260,7 @@ export default {
 .author {
   width: 20%;
   overflow: auto;
+  padding: 20px 0;
   background: rgba(255, 255, 255, 0.8);
   .search {
     position: fixed;
