@@ -52,6 +52,10 @@ export default {
           list = [];
           state.authorList = [];
           if (router.query.id) {
+            // 路由改变，将滚动条回滚至顶部
+            [".author", ".md"].forEach((item) => {
+              document.querySelector(item).scrollTop = 0;
+            });
             getFile();
           }
         }
