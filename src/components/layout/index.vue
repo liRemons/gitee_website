@@ -245,7 +245,7 @@ header {
 .image {
   width: 20px;
   height: 20px;
-  border-radius: 50%;
+  // border-radius: 50%;
   float: right;
 }
 .left {
