@@ -1,3 +1,11 @@
+<!--
+ * @Description: 
+ * @Version: 
+ * @Autor: 
+ * @Date: 2021-02-23 08:42:19
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-02 15:02:52
+-->
 <template>
   <div>
     <div class="flex">
@@ -7,10 +15,8 @@
         :key="item.id"
         @click="toRouter(item)"
       >
-        <el-card shadow="never" class="tc" :body-style="{ padding: '0px' }">
-          <img :src="$url + item.imgUrl" class="image" /><br />
-          <span class="title">{{ item.title }}</span>
-        </el-card>
+        <img :src="$url + item.imgUrl" class="image" />
+        <span class="title">{{ item.title }}</span>
       </div>
     </div>
   </div>
@@ -46,6 +52,7 @@ export default {
   width: 1300px;
   margin: 50px auto;
   .card {
+    text-align: center;
     width: 180px;
     margin: 18px;
     flex-grow: 0;
@@ -53,13 +60,18 @@ export default {
     background: rgba(226, 247, 255, 0.507);
     color: #fff;
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     &:hover {
       box-shadow: 0 0 10px 6px rgba(41, 41, 41, 0.171);
       transition: all 0.5s;
     }
     cursor: pointer;
     img {
-      width: 70%;
+      height: 130px;
+     max-width: 90%;
       margin: 10px 0;
     }
     .title {
@@ -71,25 +83,4 @@ export default {
     }
   }
 }
-
-::v-deep {
-  .el-card {
-    background: transparent;
-
-    border: none;
-    .el-card__body {
-      text-align: center;
-    }
-  }
-}
-
-// @media screen and (max-width: 1400px) {
-//   .flex {
-//     max-width: 1300px;
-//     .card {
-//       width: 200px;
-//       margin: 10px 15px;
-//     }
-//   }
-// }
 </style>

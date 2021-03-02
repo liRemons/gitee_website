@@ -4,8 +4,15 @@
       <!-- 头部 -->
 
       <header>
+        <img
+          :src="$img + 'home.png'"
+          @click="$router.replace('/')"
+          style="width: 40px; cursor: pointer"
+          alt=""
+        />
         <div>
           <el-select
+            v-if="menu.filter((item) => item.path === $route.path).length"
             v-model="routerPath"
             @change="changeRouter"
             placeholder="请选择"
@@ -45,6 +52,9 @@
           </div>
           <div class="icon">
             <i :class="darkIcon" @click="changeDark"></i>
+          </div>
+          <div class="icon">
+            <i class="el-icon-bottom" @click="download"></i>
           </div>
         </div>
       </header>
@@ -130,8 +140,6 @@ export default {
       } = proxy.$route;
       if (id) {
         state.routerPath = path + "&" + id;
-      } else {
-        state.routerPath = "/&home";
       }
     };
 
@@ -148,11 +156,8 @@ export default {
           break;
         }
       }
-      // 首页
-      const home = { title: "首页", id: "home", path: "/", flag: true };
       // 我的
-      const my = { title: "我", id: "my", path: "/my", flag: true };
-      state.menu = [home, ...persons, my];
+      state.menu = persons;
       //首次进入，重置路由
       setTimeout(() => {
         initRouter();
@@ -202,12 +207,18 @@ export default {
         });
       }
     };
+
+    const download = () => {
+      proxy.$route.query.id &&
+        proxy.$utils.download(proxy.$url + "/md/" + proxy.$route.query.id);
+    };
     return {
       ...toRefs(state),
       copy,
       changeBG,
       changeDark,
       changeRouter,
+      download,
     };
   },
 };
@@ -235,12 +246,15 @@ header {
   }
   .icon {
     cursor: pointer;
-    margin: 0 10px;
+    margin: 0 5px;
     text-align: center;
     outline: none;
     width: 30px;
     line-height: 30px;
     height: 30px;
+    &:hover {
+      color: #409eff;
+    }
   }
 }
 .select_option {
