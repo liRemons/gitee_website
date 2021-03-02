@@ -53,7 +53,7 @@
           <div class="icon">
             <i :class="darkIcon" @click="changeDark"></i>
           </div>
-          <div class="icon">
+          <div class="icon" v-if="$route.path === '/markdown'">
             <i class="el-icon-bottom" @click="download"></i>
           </div>
         </div>
@@ -209,8 +209,10 @@ export default {
     };
 
     const download = () => {
-      proxy.$route.query.id &&
-        proxy.$utils.download(proxy.$url + "/md/" + proxy.$route.query.id);
+      proxy.$route.query.id && proxy.$route.path === "/markdown";
+      proxy.$utils.download(
+        proxy.$url + "/md/" + proxy.$route.query.id + ".md"
+      );
     };
     return {
       ...toRefs(state),
