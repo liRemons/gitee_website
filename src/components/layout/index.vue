@@ -47,7 +47,7 @@
           />
         </div>
         <div class="handle">
-          <div class="icon" @click="$router.replace('/my?id=my')">
+          <div class="icon" @click="$router.replace('/my')">
             <img class="avatar" :src="$img + 'avatar.jpg'" alt="" />
           </div>
           <div class="icon">
