@@ -49,7 +49,8 @@ export default {
       30 /
       12
     ).toFixed(2);
-    let year = parseInt(count),month = 0;
+    let year = parseInt(count),
+      month = 0;
     if (Math.ceil(count.split(".")[1] * 0.12) === 12) {
       year += 1;
     } else {
@@ -66,7 +67,7 @@ export default {
         { icon: "el-icon-phone-outline", introduce: "15563043705" },
         {
           icon: "el-icon-timer",
-          introduce: `码龄：${year} 年 ${month ?' 个月':''} `,
+          introduce: `码龄：${year} 年 ${month ? `${month}个月` : ""} `,
         },
         { icon: "el-icon-place", introduce: "工作地：浙江 杭州" },
         { icon: "el-icon-house", introduce: "故乡：山东 菏泽" },
