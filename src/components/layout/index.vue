@@ -2,24 +2,43 @@
   <div>
     <div class="layout_flex">
       <!-- 头部 -->
+
       <header>
-        <el-select
-          v-model="routerPath"
-          @change="changeRouter"
-          placeholder="请选择"
-        >
-          <el-option
-            v-for="item in menu"
-            :key="item.id"
-            :label="item.title"
-            :value="item.path + '&' + item.id"
+        <div>
+          <el-select
+            v-model="routerPath"
+            @change="changeRouter"
+            placeholder="请选择"
           >
-            <div class="select_option">
-              <span style="float: left">{{ item.title }}</span>
-              <img v-if="item.imgUrl" :src="$url + item.imgUrl" class="image" />
-            </div>
-          </el-option>
-        </el-select>
+            <el-option
+              v-for="item in menu"
+              :key="item.id"
+              :label="item.title"
+              :value="item.path + '&' + item.id"
+            >
+              <div class="select_option">
+                <span style="float: left">{{ item.title }}</span>
+                <img
+                  v-if="item.imgUrl"
+                  :src="$url + item.imgUrl"
+                  class="image"
+                />
+              </div>
+            </el-option>
+          </el-select>
+          <img
+            style="width: 30px; margin-left: 15px"
+            v-if="
+              menu.length &&
+              $route.query.id &&
+              menu.find((item) => item.id === $route.query.id).imgUrl
+            "
+            :src="
+              $url + menu.find((item) => item.id === $route.query.id).imgUrl
+            "
+            alt=""
+          />
+        </div>
         <div class="handle">
           <div class="icon" @click="$router.replace('/my?id=my')">
             <img class="avatar" :src="$img + 'avatar.jpg'" alt="" />
@@ -29,6 +48,7 @@
           </div>
         </div>
       </header>
+
       <!-- 路由展示区 -->
       <div class="main">
         <transition name="el-zoom-in-center">
