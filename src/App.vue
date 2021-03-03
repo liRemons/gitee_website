@@ -86,7 +86,7 @@ html .el-loading-parent--relative {
   position: inherit !important;
 }
 :root {
-  --bg: url("./assets/img/bg.jpg");
+  --bg: url("https://remons.gitee.io/feq/summarize/website/assets/img/pc_bg.jpg");
   --dark: "";
 }
 .bgchild,
