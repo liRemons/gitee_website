@@ -191,6 +191,7 @@ export default {
       }, 500);
     };
     // 改变背景图
+    
     const changeBG = async (name) => {
       if (name === "change_bg") {
         let res = await axios.get(
@@ -200,7 +201,8 @@ export default {
           /<img [^>]*src=['"]([^'"]+)[^>]*>/gi,
           (match, capture) => {
             if (!capture) {
-              capture = require("./assets/img/bg.jpg");
+              capture =
+                "https://remons.gitee.io/feq/summarize/website/assets/img/pc_bg.jpg";
             }
             document.documentElement.style.setProperty(
               "--bg",
