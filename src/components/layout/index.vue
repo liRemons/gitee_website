@@ -56,6 +56,9 @@
           <div class="icon" v-if="$route.path === '/markdown'">
             <i class="el-icon-bottom" @click="download"></i>
           </div>
+          <div class="icon">
+            <i class="el-icon-document-copy" @click="checkDoc"></i>
+          </div>
         </div>
       </header>
 
@@ -91,11 +94,33 @@
         </el-popover>
       </div>
     </div>
+    <el-dialog title="前端技术文档" v-model="dialogVisible" width="800px">
+      <div>
+        <el-alert
+          v-for="item in docList"
+          :key="item"
+          type="success"
+          style="margin-bottom: 10px"
+          show-icon
+          :closable="false"
+        >
+          <template #title>
+            <a
+              :href="$url + '/website/assets/documents/' + item"
+              target="_blank"
+              style="color: #67c23a"
+              >{{ item }}</a
+            >
+          </template>
+        </el-alert>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { reactive, toRefs, getCurrentInstance, watch, onMounted } from "vue";
+import { dateFormat } from "methods-r";
 import XLSX from "xlsx";
 import axios from "axios";
 export default {
@@ -113,6 +138,8 @@ export default {
       ],
       menu: [],
       routerPath: "",
+      dialogVisible: false,
+      docList: [],
     });
 
     watch(
@@ -214,6 +241,32 @@ export default {
         proxy.$url + "/md/" + proxy.$route.query.id + ".md"
       );
     };
+    // 查看文档
+    const checkDoc = () => {
+      proxy
+        .$prompt("请输入密码", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          inputType: "password",
+        })
+        .then(async ({ value }) => {
+          if (
+            value ===
+            "remons" + dateFormat("", "yyyy-MM-dd").replaceAll("-", "")
+          ) {
+            const res = await proxy.$api.HOME.getDocList();
+            if (res.length) {
+              state.docList = res;
+              state.dialogVisible = true;
+            } else {
+              proxy.$message.warning("暂无数据");
+            }
+          } else {
+            proxy.$message.error("密码错误");
+          }
+        })
+        .catch(() => {});
+    };
     return {
       ...toRefs(state),
       copy,
@@ -221,6 +274,7 @@ export default {
       changeDark,
       changeRouter,
       download,
+      checkDoc,
     };
   },
 };
@@ -314,6 +368,12 @@ header {
 ::v-deep {
   .el-input__inner {
     background-color: transparent;
+  }
+  .el-alert__content {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
   }
   //   .el-menu {
   //     background: rgba(255, 255, 255, 0.8);

@@ -8,7 +8,7 @@
     },
     "dependencies": {
         "axios": "^0.21.1",
-        "element-plus": "^1.0.2-beta.32",
+        "element-plus": "^1.0.2-beta.36",
         "less": "^4.1.1",
         "methods-r": "^1.2.1",
         "normalize.css": "^8.0.1",
