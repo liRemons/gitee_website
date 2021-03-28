@@ -254,7 +254,7 @@ export default {
         .then(async ({ value }) => {
           if (
             value ===
-            "remons" + dateFormat("", "yyyy-MM-dd").replaceAll("-", "")
+            "remons" + dateFormat("", "yyyy-MM-dd").replace(/-/g, "")
           ) {
             const res = await proxy.$api.HOME.getDocList();
             if (res.length) {
