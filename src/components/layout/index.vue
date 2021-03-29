@@ -184,7 +184,7 @@ export default {
         }
       }
       // 我的
-      state.menu = persons;
+      state.menu = persons.filter(item=>item.path === "/markdown");
       //首次进入，重置路由
       setTimeout(() => {
         initRouter();
